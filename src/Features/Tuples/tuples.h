@@ -1,0 +1,45 @@
+#pragma once
+
+#include <iostream>
+#include <thread>
+#include <tuple>
+
+struct tup {
+	float x;
+	float y;
+	float z;
+	float w;
+};
+
+class Tuples
+{
+public: 
+	Tuples(){};
+	
+	~Tuples() = default;
+
+	tup createTuplePoint(float x, float y, float z) 
+	{
+		tup p;
+		p.x = x;
+		p.y = y;
+		p.z = z;
+		p.w = 1.0;
+		return p;
+	}
+	tup createTupleVector(float x, float y, float z)
+	{
+		tup p;
+		p.x = x;
+		p.y = y;
+		p.z = z;
+		p.w = 0.0;
+		return p;
+	}
+	void printTuple(const tup& a)
+	{
+		std::cout << a.x << "\t" << a.y << "\t" << a.z << "\t" << a.w << std::endl;
+	}
+
+private:
+};
