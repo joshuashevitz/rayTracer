@@ -1,3 +1,5 @@
 add_subdirectory(Environment)
 add_subdirectory(Projectiles)
 add_subdirectory(Colors)
+add_subdirectory(Canvas)
+add_subdirectory(Matrix)

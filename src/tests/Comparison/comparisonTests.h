@@ -4,6 +4,7 @@
 #include <thread>
 #include <tuple>
 #include "tuples.h"
+#include "Color.h"
 
 class Comparison
 {
@@ -30,6 +31,19 @@ public:
 		else {
 			return false;
 		}
+	}
+
+	bool equalC(color a, color b)
+	{
+		if ((a.blue == b.blue) && (a.red == b.red) && (a.green == b.green))
+		{
+			return true;
+		}
+		else
+		{
+			return false;
+		}
+
 	}
 
 	bool equal(tup a, tup b)

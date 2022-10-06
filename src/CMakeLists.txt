@@ -16,4 +16,6 @@ target_link_libraries(${PROJECT_NAME}
 	PUBLIC environment
 	PUBLIC projectiles
 	PUBLIC color_tuples
+	PUBLIC canvas
+	PUBLIC matrix
 )

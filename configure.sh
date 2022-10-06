@@ -1,4 +1,7 @@
-#!/bin/bash
+#! /bin/bash
 
 cd build/
-~/configs/cmake/bin/./cmake.exe ../src/./CMakeLists.txt
+
+cmake ../src/ -B build -G "Visual Studio 17 2022"
+
+cmake --build build/

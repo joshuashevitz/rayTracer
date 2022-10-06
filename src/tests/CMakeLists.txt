@@ -13,9 +13,14 @@ add_subdirectory(Comparison)
 target_include_directories(${PROJECT_NAME}
 	PUBLIC $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/Features/Algorithms>
 	PUBLIC $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/Features/Tuples>
+	PUBLIC $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/objects/Colors>
+	PUBLIC $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/objects/Matrix>
 )
+
 target_link_libraries(${PROJECT_NAME}
 	PUBLIC test_functions
 	PUBLIC algorithms
 	PUBLIC tuples
+	PUBLIC color_tuples
+	PUBLIC matrix
 )
