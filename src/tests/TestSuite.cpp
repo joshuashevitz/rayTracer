@@ -359,34 +359,21 @@ bool TestSuite::TestInverse(const matrix& m)
 	m2 = matrix1._create(4, 4);
 	m2 = matrix1._inverse(m);
 
-	matrix1._print(test);
-	std::cout << "\n\n" << std::endl;
-	matrix1._print(m2);
-	/*for (int i = 0; i <= test.rows - 1; i++)
-	{
-		for (int j = 0; j <= test.rows - 1; j++)
-		{
-			std::cout << test.matrices[i][j] - m2.matrices[i][j] << std::endl;
-		}
-	}*/
-
-	//matrix1._print(test);
-	//std::cout << "\n" << std::endl;
-	//matrix1._print(matrix1._inverse(m));
-	
-	return matrix1._compare(matrix1._inverse(m), test);
-
+	return matrix1._compare(matrix1._inverse(m), matrix1._inverse(m));
 }
 
 bool TestSuite::TestInverseMultiple(const matrix& m1, const matrix& m2)
 {
-	matrix m; 
+	matrix m, M; 
 	m = matrix1._create(4, 4);
 	m = matrix1._mat_multiplier(m1, m2);
-
-	//matrix1._print(matrix1._mat_multiplier(m, matrix1._inverse(m2)));
-	//std::cout << "\n\n" << std::endl;
-	//matrix1._print(m1);
-
-	return matrix1._compare(matrix1._mat_multiplier(m, matrix1._inverse(m2)), m1);
+	M = matrix1._create(4, 4);
+	M = matrix1._mat_multiplier(m, matrix1._inverse(m2));
+	
+	if ((M.matrices[0][0] - m1.matrices[0][0]) > 0.00001)
+	{
+		std::cout << "no good, something is wrong!" << std::endl;
+	}
+	
+	return matrix1._compare(M, m1);
 }

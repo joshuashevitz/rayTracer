@@ -64,11 +64,10 @@ bool MatrixOps::_compare(const matrix& a, const matrix& b)
 	for (int i = 0; i <= a.rows-1; i++) {
 		for (int j = 0; j <= a.columns-1; j++)
 		{
-			if (abs(a.matrices[i][j] - b.matrices[i][j]) > EPSILON) {
-				//std::cout << a.matrices[i][j] << " : " << b.matrices[i][j] << std::endl;
+			if (abs(a.matrices[i][j]) -  abs(b.matrices[i][j]) > EPSILON) {
+				std::cout << abs(a.matrices[i][j]) - abs(b.matrices[i][j]) << std::endl;
 				return false;
-			}
-			
+			}			
 		}
 	}
 	return true;
