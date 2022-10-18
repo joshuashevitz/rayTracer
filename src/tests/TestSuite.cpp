@@ -8,7 +8,7 @@
       << "function " << __FUNCTION__\
       << ", file " << __FILE__\
       << ", line " << __LINE__ << "."\
-      << std::endl << message << std::endl ,0) : 1
+      << std::endl << message << std::endl , abort(), 0) : 1
 #endif
 
 #include <assert.h>
@@ -26,7 +26,22 @@ TestSuite::TestSuite()
 	const tup& dot = tups.createTupleVector(1, 2, 3);
 	const tup& prod = tups.createTupleVector(2, 3, 4);
 	const tup& zero = tups.createTupleVector(0, 0, 0);
-	
+	const tup& translate = tups.createTupleVector(5, -3, 2);
+	const tup& transPoint = tups.createTuplePoint(-3, 4, 5);
+	const tup& scalable = tups.createTuplePoint(-4, 6, 8);
+	const tup& scaler = tups.createTupleVector(2, 3, 4);
+	const tup& scaler2 = tups.createTupleVector(-4, 6, 8);
+	const tup& rotate_x = tups.createTuplePoint(0, 1, 0);
+	const tup& rotate_y = tups.createTuplePoint(0, 0, 1);
+	const tup& comp_x = tups.createTuplePoint(0, (sqrt(2) / 2), (sqrt(2) / 2));
+	const tup& comp_x_i = tups.createTuplePoint(0, (sqrt(2) / 2), -(sqrt(2) / 2));
+	const tup& comp_y = tups.createTuplePoint((sqrt(2) / 2), 0, (sqrt(2) / 2));
+	const tup& comp_z = tups.createTuplePoint(-(sqrt(2) / 2), (sqrt(2) / 2), 0);
+	const tup& shear = tups.createTuplePoint(2, 3, 4);
+	const tup& chainPoint = tups.createTuplePoint(1, 0, 1);
+	const tup& chainScaling = tups.createTuplePoint(5, 5, 5);
+	const tup& chainTranslation = tups.createTuplePoint(10, 5, 7);
+
 	std::vector<float> vec{ 1,2,3,4,5,6,7,8,9,8,7,6,5,4,3,2 };
 	std::vector<float> vec2{ -2,1,2,3,3,2,1,-1,4,3,6,5,1,2,7,8 };
 	std::vector<float> vec3{ 1,2,3,4,2,4,4,2,8,6,4,1,0,0,0,1 };
@@ -80,7 +95,21 @@ TestSuite::TestSuite()
 	ASSERT((TestDeterminant(m5)), "Detetminant of 4x4 matrix operations NOT working correctly: ");
 	ASSERT((TestInverse(m6)),"Did NOT invert correctly: ");
 	ASSERT((TestInverseMultiple(m7, m8)), "Inverse Multiple is NOT operating correctly: ");
+	ASSERT((TestTranslation(transPoint, translate)), "Translation is NOT operating correctly: ");
+	ASSERT((TestInverseTranslation(transPoint, translate)), "Inverse Translation did NOT operate correctly: ");
+	ASSERT((TestScaling(scalable, scaler)), "Scaling NOT operating correctly: ");
+	ASSERT((TestScaling(scaler2, scaler)), "Scaling with vector NOT operating correctly: ");
+	ASSERT((TestInverseScaling(scaler2, scaler)), "Inverse Scaling NOT operating correctly: ");
+	ASSERT((TestRotations_x(rotate_x, comp_x ,pi / 4)), "X Rotation is NOT working correctly: ");
+	ASSERT((TestInverseRotations_x(rotate_x, comp_x_i, pi / 4)), "Inverse Rotation NOT operating correctly: ");
+	ASSERT((TestRotations_y(rotate_y, comp_y, pi / 4)), "Y Rotation is NOT operating correctly: ");
+	ASSERT((TestRotations_z(rotate_x, comp_z, pi / 4)), "Z Rotations is NOT operating correctly: ");
+	ASSERT((TestShearing(shear, 0, 0, 1, 0, 0, 0)), "Shearing is NOT working correctly: ");
+	ASSERT((TestChaining(chainPoint, chainScaling, chainTranslation, pi / 2)), "Chaining functions test is NOT operating correctly: ");
+	ASSERT((TestReverseChainApplication(chainPoint, chainScaling, chainTranslation, pi / 2)), "Reverse Chaining is NOT operating as expected: ");
 	//std::cout << "ALL TESTS HAVE PASSED SUCCESSFULLY" << std::endl;
+	//matrix1._print(matrix1._add_rotation_x((2 * asin(1.0)) / 4));
+	//tups.printTuple(matrix1._rotate_x(rotate_x,(2 * asin(1.0)) / 2));
 }
 
 bool TestSuite::testEquality(const tup& a, const tup& b) 
@@ -169,7 +198,6 @@ bool TestSuite::TestScalMul(const tup& a, const float& m)
 	{
 		return false;
 	}
-
 }
 
 bool TestSuite::TestScalDiv(const tup& a, const float& m) 
@@ -337,9 +365,6 @@ bool TestSuite::TestCofactor(const matrix& m, const int& r, const int& c)
 bool TestSuite::TestDeterminant(const matrix& m)
 {
 	float result = matrix1._2d_determinant(m);
-	
-	std::cout << result << std::endl;
-
 	if (result == (-4071))
 	{
 		return true;
@@ -370,10 +395,104 @@ bool TestSuite::TestInverseMultiple(const matrix& m1, const matrix& m2)
 	M = matrix1._create(4, 4);
 	M = matrix1._mat_multiplier(m, matrix1._inverse(m2));
 	
-	if ((M.matrices[0][0] - m1.matrices[0][0]) > 0.00001)
+	if (matrix1._compare(M, m1))
 	{
-		std::cout << "no good, something is wrong!" << std::endl;
+		return true;
 	}
+	return false;
+}
+
+bool TestSuite::TestTranslation(const tup& t, const tup& vec)
+{
+	tup p = tups.createTuplePoint(2, 1, 7);
+	return comp.equal(matrix1._translation(t, vec), p);
+}
+ 
+bool TestSuite::TestInverseTranslation(const tup& t, const tup& vec)
+{	
+	tup test = tups.createTuplePoint(-8, 7, 3);
+	return comp.equal(matrix1._inverse_translation(t, vec), test);
+}
+
+bool TestSuite::TestScaling(const tup& orig, const tup& vec)
+{
+	tup test = tups.createTuplePoint(-8, 18, 32);
+	return comp.equal(matrix1._scaling(orig, vec), test);
+}
+
+bool TestSuite::TestInverseScaling(const tup& orig, const tup& vec)
+{
+	tup test = tups.createTupleVector(-2, 2, 2);
+	return comp.equal(matrix1._matxtup(matrix1._inverse(matrix1._add_scaling(vec.x,vec.y,vec.z)), orig), test);
+}
+
+bool TestSuite::TestRotations_x(const tup& t,const tup& comp_x ,const double& rads)
+{
+
+	return comp.equal(matrix1._rotate_x(t, rads), comp_x);
+}
+bool TestSuite::TestRotations_y(const tup& t, const tup& comp_x, const double& rads)
+{
+
+	return comp.equal(matrix1._rotate_y(t, rads), comp_x);
+}
+
+bool TestSuite::TestRotations_z(const tup& t, const tup& comp_x, const double& rads)
+{
+
+	return comp.equal(matrix1._rotate_z(t, rads), comp_x);
+}
+
+bool TestSuite::TestInverseRotations_x(const tup& t,const tup& comp_x, const double& rads)
+{
+	return comp.equal(matrix1._matxtup(matrix1._inverse(matrix1._add_rotation_x(rads)), t), comp_x);
+}
+
+bool TestSuite::TestShearing(const tup& t, const float& x1, const float& x2, const float& y1, const float& y2, const float& z1, const float& z2)
+{
+	tup test = tups.createTuplePoint(2, 5, 4);
+	return comp.equal(matrix1._shearing(t, x1, x2, y1, y2, z1, z2), test);
+}
+
+bool TestSuite::TestChaining(const tup& p1, const tup& s1, const tup& t1, const double& rads)
+{
+	tup test1 = tups.createTuplePoint(1, -1, 0),
+		test2 = tups.createTuplePoint(5, -5, 0),
+		test3 = tups.createTuplePoint(15, 0, 7);
 	
-	return matrix1._compare(M, m1);
+	tup p2 = matrix1._rotate_x(p1, rads);
+	if (!comp.equal(p2, test1))
+	{
+		std::cout << "rotation" << std::endl;
+		return false;
+	}
+
+	tup p3 = matrix1._scaling(p2, s1);
+	if (!comp.equal(p3, test2))
+	{
+		std::cout << "scaling" << std::endl;
+		return false;
+	}
+
+	tup p4 = matrix1._translation(p3, t1);
+	if (!comp.equal(p4, test3))
+	{
+		std::cout << "translating" << std::endl;
+		return false;
+	}
+
+	return true;
+}
+
+bool TestSuite::TestReverseChainApplication(const tup& p1, const tup& s1, const tup& t1, const double& rads)
+{
+	tup test = tups.createTuplePoint(15, 0, 7);
+	matrix m = matrix1._mat_multiplier(matrix1._add_translation(t1), matrix1._add_scaling(s1.x, s1.y, s1.z));
+	m = matrix1._mat_multiplier(m, matrix1._add_rotation_x(pi / 2));
+	tup pos = matrix1._matxtup(m, p1);
+	if(comp.equal(pos, test))
+	{
+		return true;
+	}
+	return false;
 }

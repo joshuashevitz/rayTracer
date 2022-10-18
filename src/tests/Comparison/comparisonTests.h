@@ -48,6 +48,14 @@ public:
 
 	bool equal(tup a, tup b)
 	{
+		if (a.w != b.w)
+		{
+			if (equalElem(a.x, b.x) && equalElem(a.y, b.y) && equalElem(a.z, b.z))
+			{
+				return true;
+			}
+			return false;
+		}
 		if (equalElem(a.x, b.x) && equalElem(a.y, b.y)  && equalElem(a.z, b.z)  && equalElem(a.w, b.w) ) {
 			return true;
 		}

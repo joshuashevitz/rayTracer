@@ -11,6 +11,8 @@
 #include "Canvas.h"
 #include "Matrix.h"
 
+const double pi = 2 * asin(1.0);
+
 void MyFirstPPm() {
 
 	Color col;
@@ -37,11 +39,33 @@ void MyFirstPPm() {
 	c.write_to_ppm();
 }
 
+void a_clock()
+{
+	Color col;
+
+	Canvas c(900, 550);
+	c.printPixelMapSize();
+	float cHeight = (c._get_height() / 2);
+	float cWidth = (c._get_width() / 2);
+	std::cout << cWidth << " : " << cHeight << std::endl;
+	float radius = 3 / 8;
+
+	Tuples tups;
+	MatrixOps mats;
+	matrix m = mats._get_identity();
+	tup starting = tups.createTuplePoint(0, 0, 0), twelve = tups.createTuplePoint(0,0,1);
+	c.write_pixel(col.createColor(1, 1, 1), (starting.x + cWidth), c._get_height() - (starting.z + cHeight));
+	c.write_pixel(col.createColor(1, 1, 1), (twelve.x * radius) + cWidth, c._get_height() - (twelve.z * radius) + cHeight);
+	//m = mats._add_rotation_y(3 * (pi / 6));
+
+	c.write_to_ppm();
+}
+
 int main() {
 	
 	//MyFirstPPm();
-	 
-	TestSuite test;
+	a_clock();
+	//TestSuite test;
 	//if (matrix1._compare(m1, m2))
 	//{
 	//	std::cout << "compare is working effectively" << std::endl;

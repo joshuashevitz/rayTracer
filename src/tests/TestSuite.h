@@ -34,10 +34,22 @@ public:
 	bool TestInvertible(const matrix& m);
 	bool TestInverse(const matrix& m);
 	bool TestInverseMultiple(const matrix& m1, const matrix& m2);
+	bool TestTranslation(const tup& t, const tup& vec);
+	bool TestInverseTranslation(const tup& t, const tup& vec);
+	bool TestScaling(const tup& orig, const tup& vec);
+	bool TestInverseScaling(const tup& orig, const tup& vec);
+	bool TestRotations_x(const tup& t, const tup& comp, const double& rads);
+	bool TestRotations_y(const tup& t, const tup& comp, const double& rads);
+	bool TestRotations_z(const tup& t, const tup& comp, const double& rads);
+	bool TestInverseRotations_x(const tup& t, const tup& comp, const double& rads);
+	bool TestShearing(const tup& t, const float& x1, const float& x2, const float& y1, const float& y2, const float& z1, const float& z2);
+	bool TestChaining(const tup& p1, const tup& s1, const tup& t1, const double& rads);
+	bool TestReverseChainApplication(const tup& p1, const tup& s1, const tup& t1, const double& rads);
 private:
 	Tuples tups; 
 	TupleMath math;
 	Comparison comp;
 	Color col;
 	MatrixOps matrix1;
+	const double pi = 2 * asin(1.0);
 };
