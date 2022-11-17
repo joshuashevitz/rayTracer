@@ -42,22 +42,24 @@ void MyFirstPPm() {
 void a_clock()
 {
 	Color col;
-
-	Canvas c(900, 550);
-	c.printPixelMapSize();
-	float cHeight = (c._get_height() / 2);
-	float cWidth = (c._get_width() / 2);
-	std::cout << cWidth << " : " << cHeight << std::endl;
-	float radius = 3 / 8;
-
+	Canvas c(900, 900);
 	Tuples tups;
 	MatrixOps mats;
+	float cHeight = (c._get_height() / 2);
+	float cWidth = (c._get_width() / 2);
+	float radius2 = 3;
+	float radius = (radius2 / 8)*c._get_width();
+
 	matrix m = mats._get_identity();
 	tup starting = tups.createTuplePoint(0, 0, 0), twelve = tups.createTuplePoint(0,0,1);
-	c.write_pixel(col.createColor(1, 1, 1), (starting.x + cWidth), c._get_height() - (starting.z + cHeight));
-	c.write_pixel(col.createColor(1, 1, 1), (twelve.x * radius) + cWidth, c._get_height() - (twelve.z * radius) + cHeight);
-	//m = mats._add_rotation_y(3 * (pi / 6));
-
+	c.write_pixel(col.createColor(1, 1, 1), (starting.x + cWidth), (starting.z + cHeight));
+	c.write_pixel(col.createColor(1, 1, 1), (twelve.x*radius) + cWidth, c._get_height() - ((twelve.z * radius) + cHeight));
+	for (int i = 1; i <= 12; i++)
+	{
+		tup three = mats._rotate_y(twelve, i * (pi / 6));
+		tups.printTuple(three);
+		c.write_pixel(col.createColor(1, 1, 1), (three.x * radius) + cWidth, c._get_height() - ((three.z* radius) + cHeight));
+	}
 	c.write_to_ppm();
 }
 

@@ -18,4 +18,6 @@ target_link_libraries(${PROJECT_NAME}
 	PUBLIC color_tuples
 	PUBLIC canvas
 	PUBLIC matrix
+	PUBLIC rays
+	PUBLIC spheres
 )
