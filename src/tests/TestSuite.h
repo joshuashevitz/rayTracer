@@ -5,6 +5,8 @@
 #include "simpleMath.h"
 #include "Color.h"
 #include "matrix.h"
+#include "Sphere.h"
+#include "Ray.h"
 
 class TestSuite
 {
@@ -45,11 +47,26 @@ public:
 	bool TestShearing(const tup& t, const float& x1, const float& x2, const float& y1, const float& y2, const float& z1, const float& z2);
 	bool TestChaining(const tup& p1, const tup& s1, const tup& t1, const double& rads);
 	bool TestReverseChainApplication(const tup& p1, const tup& s1, const tup& t1, const double& rads);
+	bool TestTwoIntersections(const ray& r, const sphere& s);
+	bool TestTangentIntersections(const ray& r, const sphere& s);
+	bool TestNoIntersections(const ray& r,  sphere& s);
+	bool TestOriginInSphere(const ray& r, const sphere& s);
+	bool TestBehindSphere(const ray& r, const sphere& s);
+	bool TestIntersectStruct(const sphere& s, const float& t);
+	bool TestIntersectVector(const std::vector<intersection>& inters);
+	bool TestAggregateIntersections(const std::vector<intersection>& inters, const sphere& s);
+	bool TestHits();
+	bool TestTransformRay(const ray& r, const tup& t);
+	bool TestScalingRay(const ray& r, const tup& t);
+	bool TestSphereTransformation(const sphere& s, const tup& t);
 private:
 	Tuples tups; 
 	TupleMath math;
 	Comparison comp;
 	Color col;
 	MatrixOps matrix1;
+	Sphere s;
+	Rays rays;
+	Sphere SP;
 	const double pi = 2 * asin(1.0);
 };

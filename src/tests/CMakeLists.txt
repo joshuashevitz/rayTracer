@@ -15,6 +15,8 @@ target_include_directories(${PROJECT_NAME}
 	PUBLIC $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/Features/Tuples>
 	PUBLIC $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/objects/Colors>
 	PUBLIC $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/objects/Matrix>
+	PUBLIC $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/objects/Sphere>
+	PUBLIC $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/objects/Ray>
 )
 
 target_link_libraries(${PROJECT_NAME}
@@ -23,4 +25,6 @@ target_link_libraries(${PROJECT_NAME}
 	PUBLIC tuples
 	PUBLIC color_tuples
 	PUBLIC matrix
+	PUBLIC spheres
+	PUBLIC rays
 )

@@ -41,6 +41,8 @@ TestSuite::TestSuite()
 	const tup& chainPoint = tups.createTuplePoint(1, 0, 1);
 	const tup& chainScaling = tups.createTuplePoint(5, 5, 5);
 	const tup& chainTranslation = tups.createTuplePoint(10, 5, 7);
+	const tup& ray_transformation = tups.createTupleVector(3, 4, 5);
+
 
 	std::vector<float> vec{ 1,2,3,4,5,6,7,8,9,8,7,6,5,4,3,2 };
 	std::vector<float> vec2{ -2,1,2,3,3,2,1,-1,4,3,6,5,1,2,7,8 };
@@ -76,23 +78,36 @@ TestSuite::TestSuite()
 	m8 = matrix1._create(4, 4);
 	m8 = matrix1.populate_matrix(notOriginal);
 
-	ASSERT((testType(c, 0.0)), "type testing is NOT functioning as correctly: ");
-	ASSERT((testEquality(a, b)), "Tuple equality is NOT functioning correctly: ");
-	ASSERT((testAddition(a, c)), "Tuple addition is NOT functioning correctly: ");
-	ASSERT((testSubtraction(c, d)), "Tuple Subtraction is NOT functioning correctly: ");
-	ASSERT((testNegation(d)), "Tuple Negation is NOT functioning correctly: ");
-	ASSERT((zeroNegation(c, zero)), "Tuple Zero Negation is NOT functioning correctly: ");
-	ASSERT((TestScalMul(e, 3.5)), "Scalar Mulitplcation is NOT functioning correctly: ");
-	ASSERT((TestScalMul(e, 0.5)), "Scalar Mulitplcation is NOT functioning correctly: ");
-	ASSERT((TestScalDiv(e, 2)), "Scalar Division is NOT functioning correctly: ");
+	
+	sphere s1, s2, s3;
+	s1 = s._init_sphere(s1), s2 = s._init_sphere(s2), s3 = s._init_sphere(s3);
+	std::cout << s1.sid << std::endl;
+	std::cout << s2.sid << std::endl;
+	
+	ray r1 = rays._init_ray(tups.createTuplePoint(0, 0, -5), tups.createTupleVector(0, 0, 1));
+	ray r2 = rays._init_ray(tups.createTuplePoint(0, 1, -5), tups.createTupleVector(0, 0, 1));
+	ray r3 = rays._init_ray(tups.createTuplePoint(0, 2, -5), tups.createTupleVector(0, 0, 1));
+	ray r4 = rays._init_ray(tups.createTuplePoint(0, 0, 0), tups.createTupleVector(0, 0, 1));
+	ray r5 = rays._init_ray(tups.createTuplePoint(0, 0, 5), tups.createTupleVector(0, 0, 1));
+	ray r6 = rays._init_ray(tups.createTuplePoint(1, 2, 3), tups.createTupleVector(0, 1, 0));
+	
+	ASSERT((testType(c, 0.0)), "type testing is NOT operating as correctly: ");
+	ASSERT((testEquality(a, b)), "Tuple equality is NOT operating correctly: ");
+	ASSERT((testAddition(a, c)), "Tuple addition is NOT operating correctly: ");
+	ASSERT((testSubtraction(c, d)), "Tuple Subtraction is NOT operating correctly: ");
+	ASSERT((testNegation(d)), "Tuple Negation is NOT operating correctly: ");
+	ASSERT((zeroNegation(c, zero)), "Tuple Zero Negation is NOT operating correctly: ");
+	ASSERT((TestScalMul(e, 3.5)), "Scalar Mulitplcation is NOT operating correctly: ");
+	ASSERT((TestScalMul(e, 0.5)), "Scalar Mulitplcation is NOT operating correctly: ");
+	ASSERT((TestScalDiv(e, 2)), "Scalar Division is NOT operating correctly: ");
 	ASSERT((TestMagnitude(m, sqrtf(14))), "Magnitude is NOT being calculated correctly: ");
-	ASSERT((TestNormal(d)), "Normalization is NOT functioning correctly: ");
-	ASSERT((TestDotProd(dot, prod, 20.0)), "Dot Product is NOT functioning correctly: ");
+	ASSERT((TestNormal(d)), "Normalization is NOT operating correctly: ");
+	ASSERT((TestDotProd(dot, prod, 20.0)), "Dot Product is NOT operating correctly: ");
 	ASSERT((TestCrossProd(dot, prod)), "Cross Product is NOT being calculated correctly: ");
-	ASSERT((TestSubmatrix(m1, 2, 1)), "Submatrix is NOT functioning as it should be: ");
+	ASSERT((TestSubmatrix(m1, 2, 1)), "Submatrix is NOT operating as it should be: ");
 	ASSERT((TestMinor(m4, 1, 0)), "NOT calculating the minor correctly: ");
 	ASSERT((TestCofactor(m4, 1, 0)), "Cofactor is NOT being deterimined correctly: ");
-	ASSERT((TestDeterminant(m5)), "Detetminant of 4x4 matrix operations NOT working correctly: ");
+	ASSERT((TestDeterminant(m5)), "Detetminant of 4x4 matrix operations NOT operating correctly: ");
 	ASSERT((TestInverse(m6)),"Did NOT invert correctly: ");
 	ASSERT((TestInverseMultiple(m7, m8)), "Inverse Multiple is NOT operating correctly: ");
 	ASSERT((TestTranslation(transPoint, translate)), "Translation is NOT operating correctly: ");
@@ -100,13 +115,23 @@ TestSuite::TestSuite()
 	ASSERT((TestScaling(scalable, scaler)), "Scaling NOT operating correctly: ");
 	ASSERT((TestScaling(scaler2, scaler)), "Scaling with vector NOT operating correctly: ");
 	ASSERT((TestInverseScaling(scaler2, scaler)), "Inverse Scaling NOT operating correctly: ");
-	ASSERT((TestRotations_x(rotate_x, comp_x ,pi / 4)), "X Rotation is NOT working correctly: ");
+	ASSERT((TestRotations_x(rotate_x, comp_x ,pi / 4)), "X Rotation is NOT operating correctly: ");
 	ASSERT((TestInverseRotations_x(rotate_x, comp_x_i, pi / 4)), "Inverse Rotation NOT operating correctly: ");
 	ASSERT((TestRotations_y(rotate_y, comp_y, pi / 4)), "Y Rotation is NOT operating correctly: ");
 	ASSERT((TestRotations_z(rotate_x, comp_z, pi / 4)), "Z Rotations is NOT operating correctly: ");
-	ASSERT((TestShearing(shear, 0, 0, 1, 0, 0, 0)), "Shearing is NOT working correctly: ");
+	ASSERT((TestShearing(shear, 0, 0, 1, 0, 0, 0)), "Shearing is NOT operating correctly: ");
 	ASSERT((TestChaining(chainPoint, chainScaling, chainTranslation, pi / 2)), "Chaining functions test is NOT operating correctly: ");
 	ASSERT((TestReverseChainApplication(chainPoint, chainScaling, chainTranslation, pi / 2)), "Reverse Chaining is NOT operating as expected: ");
+	ASSERT((TestTwoIntersections(r1, s1)), "Intersting two points is NOT operating as expected: ");
+	ASSERT((TestTangentIntersections(r2, s1)), "Intersection tangent to sphere is NOT operating as expected: ");
+	ASSERT((TestNoIntersections(r3, s3)), "Missed Intersection NOT operating as expected: ");
+	ASSERT((TestOriginInSphere(r4, s1)), "Starting In Sphere NOT operating as expected: ");
+	ASSERT((TestBehindSphere(r5, s2)), "Ray NOT appearing behind sphere as expected: ");
+	ASSERT((TestIntersectVector(rays._get_inters())), "Intersections NOT being recorded properly: ");
+	ASSERT((TestHits()), "Hits NOT operating as Expected: ");
+	ASSERT((TestTransformRay(r6, ray_transformation)), "Ray Transformation NOT operating as expected: ");
+	ASSERT((TestScalingRay(r6, prod)), "Ray Scaling is NOT operating as expected: ");
+	ASSERT((TestSphereTransformation(s1, scaler)), "Setting Transform Matrix in Sphere is NOT operating as expected: ");
 	//std::cout << "ALL TESTS HAVE PASSED SUCCESSFULLY" << std::endl;
 	//matrix1._print(matrix1._add_rotation_x((2 * asin(1.0)) / 4));
 	//tups.printTuple(matrix1._rotate_x(rotate_x,(2 * asin(1.0)) / 2));
@@ -423,7 +448,7 @@ bool TestSuite::TestScaling(const tup& orig, const tup& vec)
 bool TestSuite::TestInverseScaling(const tup& orig, const tup& vec)
 {
 	tup test = tups.createTupleVector(-2, 2, 2);
-	return comp.equal(matrix1._matxtup(matrix1._inverse(matrix1._add_scaling(vec.x,vec.y,vec.z)), orig), test);
+	return comp.equal(matrix1._inverse_scaling(orig, vec), test);
 }
 
 bool TestSuite::TestRotations_x(const tup& t,const tup& comp_x ,const double& rads)
@@ -496,3 +521,150 @@ bool TestSuite::TestReverseChainApplication(const tup& p1, const tup& s1, const 
 	}
 	return false;
 }
+
+bool TestSuite::TestTwoIntersections(const ray& r, const sphere& s) {
+	 rays.intersect(s, r);
+
+	if (rays._get_inters()[0].t == 4.0 && rays._get_inters()[1].t == 6.0)
+	{
+		return true;
+	}
+	else
+	{
+		return false;
+	}
+
+}
+
+bool TestSuite::TestTangentIntersections(const ray& r, const sphere& s) {
+	rays.intersect(s, r);
+
+	if (rays._get_inters()[rays._get_inters().size() -2].t == 5.0 && rays._get_inters()[rays._get_inters().size() -2].t == rays._get_inters()[rays._get_inters().size() -1].t)
+	{
+		return true;
+	}
+	else
+	{
+		return false;
+	}
+}
+bool TestSuite::TestNoIntersections(const ray& r, sphere& s) {
+	rays.intersect(s, r);
+	for (auto& x : rays._get_inters())
+	{
+		if (x.object.sid == s.sid)
+		{
+			return false;
+		}
+	}
+	return true;
+}
+bool TestSuite::TestOriginInSphere(const ray& r, const sphere& s) {
+	rays.intersect(s, r);
+	if (rays._get_inters()[rays._get_inters().size() -2].t == -1.0 && rays._get_inters().back().t == 1.0)
+	{
+		return true;
+	}
+	else
+	{
+		return false;
+	}
+}
+bool TestSuite::TestBehindSphere(const ray& r, const sphere& s) {
+	rays.intersect(s, r);
+
+	if (rays._get_inters()[rays._get_inters().size() - 2].t == -6.0 && rays._get_inters()[rays._get_inters().size() - 1].t == -4.0)
+	{
+		return true;
+	}
+	else
+	{
+		return false;
+	}
+}
+bool TestSuite::TestIntersectStruct(const sphere& s, const float& t1) {
+	intersection i;
+	i.object = s;
+	i.t = t1;
+	if (i.object.sid && i.t == t1) {
+		return true;
+	}
+	else
+	{
+		return false;
+	}
+}
+
+bool TestSuite::TestIntersectVector(const std::vector<intersection>& inters) {
+	
+	for (const auto& x : inters)
+	{
+		std::cout << x.object.sid << " : " << x.t << std::endl;
+	}
+
+	if (inters.size() == 0)
+	{
+		return false;
+	}
+	return true;
+}
+
+bool TestSuite::TestAggregateIntersections(const std::vector<intersection>& inters, const sphere& s)
+{
+	ray r = rays._init_ray(tups.createTuplePoint(0, 0, -7), tups.createTupleVector(0, 0, 1));
+	ray r1 = rays._init_ray(tups.createTuplePoint(0, 0, 3), tups.createTupleVector(0, 0, 1));
+	rays.intersect(s, r);
+	rays.intersect(s, r1);
+	return true;
+}
+
+bool TestSuite::TestHits()
+{
+	intersection lowest = rays._hit();
+
+	if (lowest.t < 0)
+	{
+		return false;
+	}
+	if (lowest.t == 1.0)
+	{
+		return true;
+	}
+}
+
+bool TestSuite::TestTransformRay(const ray& r, const tup& t)
+{
+	tup TestOrig = tups.createTuplePoint(4, 6, 8);
+	tup TestVec = tups.createTupleVector(0, 1, 0);
+	matrix m = matrix1._add_translation(t);
+	ray r_test = rays._transform(r, m);
+
+	if (comp.equal(r_test.origin, TestOrig) && comp.equal(r.direction, r_test.direction))
+	{
+		return true;
+	}
+	return false;
+}
+
+bool TestSuite::TestScalingRay(const ray& r, const tup& t) 
+{
+	tup TestOrig = tups.createTuplePoint(2, 6, 12);
+	tup TestVec = tups.createTupleVector(0, 3, 0);
+	matrix m = matrix1._add_scaling(t.x,t.y,t.z);
+	ray r_test = rays._transform(r, m);
+
+	if (comp.equal(r_test.origin, TestOrig) && comp.equal(r_test.direction, TestVec))
+	{
+		return true;
+	}
+	return false;
+}
+
+bool TestSuite::TestSphereTransformation(const sphere& s, const tup& t)
+{
+	sphere s1 = SP._init_sphere(s1);
+	s1.transform = matrix1._add_translation(t);
+	
+	return true;
+}
+

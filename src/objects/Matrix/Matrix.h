@@ -25,7 +25,6 @@ public:
 	float _2d_determinant(const matrix& m);
 	float _minor(const matrix& m, const int& r, const int& c);
 	float _cofactor(const matrix& m, const int& r, const int& c);
-	tup _matxtup(const matrix& m, const tup& t);
 	matrix _submatrix(const matrix& m, int r, int c);
 	matrix _create(const int& rows, const int& col);
 	matrix add_to_matrix(const float& x, const int& row, const int& col);
@@ -41,12 +40,13 @@ public:
 	matrix _add_shear(const float& x1, const float& x2, const float& y1, const float& y2, const float& z1, const float& z2);
 	tup _translation(const tup& orig, const tup& t);
 	tup _inverse_translation(const tup& orig, const tup& vec);
+	tup _inverse_scaling(const tup& orig, const tup& vec);
 	tup _scaling(const tup& t, const tup& vec);
 	tup _rotate_x(const tup& t,const double& rads);
 	tup _rotate_y(const tup& t, const double& rads);
 	tup _rotate_z(const tup& t, const double& rads);
 	tup _shearing(const tup& t, const float& x1, const float& x2, const float& y1, const float& y2, const float& z1, const float& z2);
-	
+	tup _matxtup(const matrix& m, const tup& t);
 
 	matrix _get_identity()
 	{

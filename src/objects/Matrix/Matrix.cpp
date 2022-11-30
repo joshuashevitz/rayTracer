@@ -253,7 +253,6 @@ tup MatrixOps::_translation(const tup& orig, const tup& vec)
 	_clear();
 	mat = _add_translation(vec);
 	return _matxtup(mat, orig);
-
 }
 
 tup MatrixOps::_inverse_translation(const tup& orig, const tup& vec)
@@ -316,6 +315,13 @@ tup MatrixOps::_scaling(const tup& orig, const tup& vec)
 	_clear();
 	mat = identity;
 	tup s = _matxtup(_add_scaling(vec.x, vec.y, vec.z), orig);
+	return s;
+}
+
+tup MatrixOps::_inverse_scaling(const tup& orig, const tup& vec)
+{
+	mat = identity;
+	tup s = _matxtup(_inverse(_add_scaling(vec.x, vec.y, vec.z)), orig);
 	return s;
 }
 

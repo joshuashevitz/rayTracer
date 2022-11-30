@@ -66,8 +66,8 @@ void a_clock()
 int main() {
 	
 	//MyFirstPPm();
-	a_clock();
-	//TestSuite test;
+	//a_clock();
+	TestSuite test;
 	//if (matrix1._compare(m1, m2))
 	//{
 	//	std::cout << "compare is working effectively" << std::endl;
