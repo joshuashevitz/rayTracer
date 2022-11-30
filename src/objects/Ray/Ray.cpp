@@ -27,9 +27,9 @@ tup Rays::_position(const ray& r, const float& t)
 std::vector<intersection> Rays::intersect(const sphere& s, const ray& r) 
 {
 	ray r2 = _transform(r, mats._inverse(s.transform));
-	tup sphere_to_ray = math.subtTuples(r.origin, s.origin);
-	float a = math.dotProduct(r.direction, r.direction);
-	float b = 2 * math.dotProduct(r.direction, sphere_to_ray);
+	tup sphere_to_ray = math.subtTuples(r2.origin, s.origin);
+	float a = math.dotProduct(r2.direction, r2.direction);
+	float b = 2 * math.dotProduct(r2.direction, sphere_to_ray);
 	float c = math.dotProduct(sphere_to_ray, sphere_to_ray) - 1;
 	float discriminant = ((b * b) - (4 * a * c));
 	
@@ -53,19 +53,25 @@ intersection Rays::_init_intersection(const sphere& s,const float& t1)
 	return i;
 }
 
-intersection Rays::_hit() 
-{	
-	intersection lowest = NULL_INTERSECTION;
+intersection Rays::_hit()
+{
+	intersection lowest;
+	if (inter.size() > 0)
+	{
+		lowest = inter[0];
+	}else
+	{
+		lowest = NULL_INTERSECTION;
+	}
 	for (const auto& x : inter)
 	{
-		if (x.t > 0 && x.t < lowest.t)
+		if (x.t > 0 && (x.t < lowest.t || lowest.t == NULL_INTERSECTION.t))
 		{
 			lowest = x;
 		}
 	}
 	return lowest;
 }
-
 
 ray Rays::_transform(const ray& r, const matrix& m)
 {

@@ -132,6 +132,8 @@ TestSuite::TestSuite()
 	ASSERT((TestTransformRay(r6, ray_transformation)), "Ray Transformation NOT operating as expected: ");
 	ASSERT((TestScalingRay(r6, prod)), "Ray Scaling is NOT operating as expected: ");
 	ASSERT((TestSphereTransformation(s1, scaler)), "Setting Transform Matrix in Sphere is NOT operating as expected: ");
+	ASSERT((TestIntersectingScaledSphere(r1, s1)), "Attempt to Intersect Scaled Sphere NOT operating as expected: ");
+	ASSERT((TestIntersectingTransformedSphere(r1, s1)), "Attempt to Intersect Transformed sphere NOT operating as expected: ");
 	//std::cout << "ALL TESTS HAVE PASSED SUCCESSFULLY" << std::endl;
 	//matrix1._print(matrix1._add_rotation_x((2 * asin(1.0)) / 4));
 	//tups.printTuple(matrix1._rotate_x(rotate_x,(2 * asin(1.0)) / 2));
@@ -538,7 +540,10 @@ bool TestSuite::TestTwoIntersections(const ray& r, const sphere& s) {
 
 bool TestSuite::TestTangentIntersections(const ray& r, const sphere& s) {
 	rays.intersect(s, r);
-
+	for (const auto& x : rays._get_inters())
+	{
+		std::cout << x.t << std::endl;
+	}
 	if (rays._get_inters()[rays._get_inters().size() -2].t == 5.0 && rays._get_inters()[rays._get_inters().size() -2].t == rays._get_inters()[rays._get_inters().size() -1].t)
 	{
 		return true;
@@ -597,11 +602,6 @@ bool TestSuite::TestIntersectStruct(const sphere& s, const float& t1) {
 
 bool TestSuite::TestIntersectVector(const std::vector<intersection>& inters) {
 	
-	for (const auto& x : inters)
-	{
-		std::cout << x.object.sid << " : " << x.t << std::endl;
-	}
-
 	if (inters.size() == 0)
 	{
 		return false;
@@ -615,6 +615,12 @@ bool TestSuite::TestAggregateIntersections(const std::vector<intersection>& inte
 	ray r1 = rays._init_ray(tups.createTuplePoint(0, 0, 3), tups.createTupleVector(0, 0, 1));
 	rays.intersect(s, r);
 	rays.intersect(s, r1);
+	std::cout << rays._get_inters().size() << std::endl;
+
+	for (const auto& x : rays._get_inters())
+	{
+		std::cout << x.t << std::endl;
+	}
 	return true;
 }
 
@@ -668,3 +674,27 @@ bool TestSuite::TestSphereTransformation(const sphere& s, const tup& t)
 	return true;
 }
 
+bool TestSuite::TestIntersectingScaledSphere(const ray& r, const sphere& s)
+{
+	sphere s1 = s;
+	s1.transform = matrix1._add_scaling(2, 2, 2);
+	rays.intersect(s1, r);
+	
+	if (rays._get_inters().back().t == 7 && rays._get_inters()[rays._get_inters().size() - 2].t == 3)
+	{
+		return true;
+	}
+	return false;
+}
+
+bool TestSuite::TestIntersectingTransformedSphere(const ray& r, const sphere& s)
+{
+	sphere s1 = s;
+	s1.transform = matrix1._add_translation(tups.createTupleVector(5, 0, 0));
+	rays.intersect(s1, r);
+	if (rays._get_inters().back().t == 7)
+	{
+		return true;
+	}
+	return false;
+}

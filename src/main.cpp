@@ -62,12 +62,64 @@ void a_clock()
 	}
 	c.write_to_ppm();
 }
+void my_first_sphere_trace()
+{
+	Color col;
+	Canvas c(100, 100);
+	Tuples tups;
+	TupleMath math;
+	MatrixOps mats;
+	Sphere spheres;
+	sphere s = spheres._init_sphere(s);
+	Rays rays;
+	ray r;
+	tup wallPoint;
+	float wall_z = 10;
+	float wall_size = 7.0;
+	float pixelsize = wall_size / 100;
+	float half = wall_size / 2;
+	r.origin = tups.createTuplePoint(0, 0, -5);
+	//std::cout << c._get_height() << " " << c._get_width() << std::endl;
+	for (int y = 0; y <= c._get_height() - 1; y++)
+	{
+		float world_y = half - (pixelsize * y);
+		//std::cout << "this world_y value is " << world_y << std::endl;
+		for (int x = 0; x <= c._get_width() - 1; x++)
+		{
+			float world_x = -half + (pixelsize * x);
+			//std::cout << "The world_x value is " << world_x << std::endl;
+			wallPoint = tups.createTuplePoint(world_x, world_y, wall_z);
+			//std::cout << "The wall point value is ";
+			//tups.printTuple(wallPoint);
+			r.direction = math.normilize(math.subtTuples(wallPoint, r.origin));
+			rays.intersect(s, r);
+			/*if (rays._get_inters().size() > 0)
+			{
+				std::cout << rays._get_inters().back().t << std::endl;
+			}*/
+			if (rays._hit().t > 0)
+			{
+				c.write_pixel(col.createColor(1, 0, 0), x, y);
+			}
+		}
+		/*for (const auto x : rays._get_inters())
+		{
+			std::cout << x.t << " ";
+		}
+		*/
+		//std::cout << rays._get_inters().size() << std::endl;
+		rays._clear();
+		//std::cout << rays._get_inters().size() << std::endl;
+	}
+	//c.write_to_ppm();
+}
 
 int main() {
 	
 	//MyFirstPPm();
 	//a_clock();
-	TestSuite test;
+	//TestSuite test;
+	my_first_sphere_trace();
 	//if (matrix1._compare(m1, m2))
 	//{
 	//	std::cout << "compare is working effectively" << std::endl;

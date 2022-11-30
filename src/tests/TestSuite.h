@@ -59,6 +59,9 @@ public:
 	bool TestTransformRay(const ray& r, const tup& t);
 	bool TestScalingRay(const ray& r, const tup& t);
 	bool TestSphereTransformation(const sphere& s, const tup& t);
+	bool TestIntersectingScaledSphere(const ray& r, const sphere& s);
+	bool TestIntersectingTransformedSphere(const ray& r, const sphere& s); 
+
 private:
 	Tuples tups; 
 	TupleMath math;
