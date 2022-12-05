@@ -42,7 +42,9 @@ TestSuite::TestSuite()
 	const tup& chainScaling = tups.createTuplePoint(5, 5, 5);
 	const tup& chainTranslation = tups.createTuplePoint(10, 5, 7);
 	const tup& ray_transformation = tups.createTupleVector(3, 4, 5);
-
+	const tup& sphereNormal_x = tups.createTuplePoint(1, 0, 0);
+	const tup& sphereNormalTranslated = tups.createTuplePoint(0, 1.70711, -0.70711);
+	const tup& sphereNormalTransformed = tups.createTuplePoint(0, sqrt(2)/2, -sqrt(2)/2);
 
 	std::vector<float> vec{ 1,2,3,4,5,6,7,8,9,8,7,6,5,4,3,2 };
 	std::vector<float> vec2{ -2,1,2,3,3,2,1,-1,4,3,6,5,1,2,7,8 };
@@ -134,6 +136,10 @@ TestSuite::TestSuite()
 	ASSERT((TestSphereTransformation(s1, scaler)), "Setting Transform Matrix in Sphere is NOT operating as expected: ");
 	ASSERT((TestIntersectingScaledSphere(r1, s1)), "Attempt to Intersect Scaled Sphere NOT operating as expected: ");
 	ASSERT((TestIntersectingTransformedSphere(r1, s1)), "Attempt to Intersect Transformed sphere NOT operating as expected: ");
+	ASSERT((TestShapeNormal(s1, sphereNormal_x)), "Normalization of x is NOT operating as expected: ");
+	ASSERT((TestTranslatedNormal(s1, sphereNormalTranslated)), "Translated Normal is NOT operating as expected: ");
+	ASSERT((TestTransformedNormal(s1, sphereNormalTransformed)), "Transformed Normal is NOT operating as expected: ");
+
 	//std::cout << "ALL TESTS HAVE PASSED SUCCESSFULLY" << std::endl;
 	//matrix1._print(matrix1._add_rotation_x((2 * asin(1.0)) / 4));
 	//tups.printTuple(matrix1._rotate_x(rotate_x,(2 * asin(1.0)) / 2));
@@ -490,21 +496,18 @@ bool TestSuite::TestChaining(const tup& p1, const tup& s1, const tup& t1, const 
 	tup p2 = matrix1._rotate_x(p1, rads);
 	if (!comp.equal(p2, test1))
 	{
-		std::cout << "rotation" << std::endl;
 		return false;
 	}
 
 	tup p3 = matrix1._scaling(p2, s1);
 	if (!comp.equal(p3, test2))
 	{
-		std::cout << "scaling" << std::endl;
 		return false;
 	}
 
 	tup p4 = matrix1._translation(p3, t1);
 	if (!comp.equal(p4, test3))
 	{
-		std::cout << "translating" << std::endl;
 		return false;
 	}
 
@@ -524,9 +527,9 @@ bool TestSuite::TestReverseChainApplication(const tup& p1, const tup& s1, const 
 	return false;
 }
 
-bool TestSuite::TestTwoIntersections(const ray& r, const sphere& s) {
-	 rays.intersect(s, r);
-
+bool TestSuite::TestTwoIntersections(const ray& r, const sphere& s) 
+{
+	rays.intersect(s, r);
 	if (rays._get_inters()[0].t == 4.0 && rays._get_inters()[1].t == 6.0)
 	{
 		return true;
@@ -538,12 +541,9 @@ bool TestSuite::TestTwoIntersections(const ray& r, const sphere& s) {
 
 }
 
-bool TestSuite::TestTangentIntersections(const ray& r, const sphere& s) {
+bool TestSuite::TestTangentIntersections(const ray& r, const sphere& s) 
+{
 	rays.intersect(s, r);
-	for (const auto& x : rays._get_inters())
-	{
-		std::cout << x.t << std::endl;
-	}
 	if (rays._get_inters()[rays._get_inters().size() -2].t == 5.0 && rays._get_inters()[rays._get_inters().size() -2].t == rays._get_inters()[rays._get_inters().size() -1].t)
 	{
 		return true;
@@ -553,7 +553,8 @@ bool TestSuite::TestTangentIntersections(const ray& r, const sphere& s) {
 		return false;
 	}
 }
-bool TestSuite::TestNoIntersections(const ray& r, sphere& s) {
+bool TestSuite::TestNoIntersections(const ray& r, sphere& s) 
+{
 	rays.intersect(s, r);
 	for (auto& x : rays._get_inters())
 	{
@@ -564,7 +565,8 @@ bool TestSuite::TestNoIntersections(const ray& r, sphere& s) {
 	}
 	return true;
 }
-bool TestSuite::TestOriginInSphere(const ray& r, const sphere& s) {
+bool TestSuite::TestOriginInSphere(const ray& r, const sphere& s) 
+{
 	rays.intersect(s, r);
 	if (rays._get_inters()[rays._get_inters().size() -2].t == -1.0 && rays._get_inters().back().t == 1.0)
 	{
@@ -575,9 +577,9 @@ bool TestSuite::TestOriginInSphere(const ray& r, const sphere& s) {
 		return false;
 	}
 }
-bool TestSuite::TestBehindSphere(const ray& r, const sphere& s) {
+bool TestSuite::TestBehindSphere(const ray& r, const sphere& s) 
+{
 	rays.intersect(s, r);
-
 	if (rays._get_inters()[rays._get_inters().size() - 2].t == -6.0 && rays._get_inters()[rays._get_inters().size() - 1].t == -4.0)
 	{
 		return true;
@@ -587,7 +589,8 @@ bool TestSuite::TestBehindSphere(const ray& r, const sphere& s) {
 		return false;
 	}
 }
-bool TestSuite::TestIntersectStruct(const sphere& s, const float& t1) {
+bool TestSuite::TestIntersectStruct(const sphere& s, const float& t1) 
+{
 	intersection i;
 	i.object = s;
 	i.t = t1;
@@ -600,8 +603,8 @@ bool TestSuite::TestIntersectStruct(const sphere& s, const float& t1) {
 	}
 }
 
-bool TestSuite::TestIntersectVector(const std::vector<intersection>& inters) {
-	
+bool TestSuite::TestIntersectVector(const std::vector<intersection>& inters) 
+{
 	if (inters.size() == 0)
 	{
 		return false;
@@ -609,25 +612,24 @@ bool TestSuite::TestIntersectVector(const std::vector<intersection>& inters) {
 	return true;
 }
 
+//=====================================================================
+//add proper test function to test the aggregate intersection of
+//a sphere and a ray to properly show it is working effectively
+//=====================================================================
 bool TestSuite::TestAggregateIntersections(const std::vector<intersection>& inters, const sphere& s)
 {
 	ray r = rays._init_ray(tups.createTuplePoint(0, 0, -7), tups.createTupleVector(0, 0, 1));
 	ray r1 = rays._init_ray(tups.createTuplePoint(0, 0, 3), tups.createTupleVector(0, 0, 1));
 	rays.intersect(s, r);
 	rays.intersect(s, r1);
-	std::cout << rays._get_inters().size() << std::endl;
+	
 
-	for (const auto& x : rays._get_inters())
-	{
-		std::cout << x.t << std::endl;
-	}
 	return true;
 }
 
 bool TestSuite::TestHits()
 {
 	intersection lowest = rays._hit();
-
 	if (lowest.t < 0)
 	{
 		return false;
@@ -644,7 +646,6 @@ bool TestSuite::TestTransformRay(const ray& r, const tup& t)
 	tup TestVec = tups.createTupleVector(0, 1, 0);
 	matrix m = matrix1._add_translation(t);
 	ray r_test = rays._transform(r, m);
-
 	if (comp.equal(r_test.origin, TestOrig) && comp.equal(r.direction, r_test.direction))
 	{
 		return true;
@@ -658,7 +659,6 @@ bool TestSuite::TestScalingRay(const ray& r, const tup& t)
 	tup TestVec = tups.createTupleVector(0, 3, 0);
 	matrix m = matrix1._add_scaling(t.x,t.y,t.z);
 	ray r_test = rays._transform(r, m);
-
 	if (comp.equal(r_test.origin, TestOrig) && comp.equal(r_test.direction, TestVec))
 	{
 		return true;
@@ -679,7 +679,6 @@ bool TestSuite::TestIntersectingScaledSphere(const ray& r, const sphere& s)
 	sphere s1 = s;
 	s1.transform = matrix1._add_scaling(2, 2, 2);
 	rays.intersect(s1, r);
-	
 	if (rays._get_inters().back().t == 7 && rays._get_inters()[rays._get_inters().size() - 2].t == 3)
 	{
 		return true;
@@ -694,6 +693,47 @@ bool TestSuite::TestIntersectingTransformedSphere(const ray& r, const sphere& s)
 	rays.intersect(s1, r);
 	if (rays._get_inters().back().t == 7)
 	{
+		return true;
+	}
+	return false;
+}
+
+bool TestSuite::TestShapeNormal(const sphere& s, const tup& point)
+{
+	tup norm = SP._normal_at(s, point);
+	tup TestVec = tups.createTupleVector(1, 0, 0);
+	if (comp.equal(norm, TestVec));
+	{
+		return true;
+	}
+	return false;
+}
+bool TestSuite::TestTranslatedNormal(const sphere& s, const tup& point)
+{
+	sphere s1 = s;
+	s1.transform = matrix1._add_translation(tups.createTuplePoint(0, 1, 0));
+	tup norm = SP._normal_at(s1, point);
+	tup TestVec = tups.createTupleVector(0, 0.70711, -0.70711);
+	if (comp.equal(norm, TestVec));
+	{
+		tups.printTuple(norm);
+		return true;
+	}
+	return false;
+}
+bool TestSuite::TestTransformedNormal(const sphere& s, const tup& point)
+{
+	std::cout << 1 << std::endl;
+	sphere s1 = s;
+	s1.transform = matrix1._mat_multiplier(matrix1._add_scaling(1,0.5,1), matrix1._add_rotation_z(matrix1._get_pi()/5));
+	std::cout << 2 << std::endl;
+	tup norm = SP._normal_at(s1, point);
+	std::cout << 3 << std::endl;
+	tup TestVec = tups.createTupleVector(0, 0.97014, 0.24254);
+	std::cout << 4 << std::endl;
+	if (comp.equal(norm, TestVec));
+	{
+		tups.printTuple(norm);
 		return true;
 	}
 	return false;

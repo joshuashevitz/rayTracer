@@ -80,7 +80,8 @@ void my_first_sphere_trace()
 	float half = wall_size / 2;
 	float world_x = 0, world_y = 0;
 	r.origin = tups.createTuplePoint(0, 0, -5);
-	s.transform = mats._mat_multiplier(mats._add_shear(1, 0, 0, 0, 0, 0), mats._add_scaling(0.5, 1, 1));
+	//s.transform = mats._mat_multiplier(mats._add_shear(1, 0, 0.5, 0, 1, 0), mats._add_scaling(0.2, 1, 1));
+	s.transform = mats._add_translation(tups.createTuplePoint(0.5, 0, 0.5));
 	for (int y = 0; y <= c._get_height() - 1; y++)
 	{
 		world_y = half - (pixelsize * y);
@@ -105,8 +106,8 @@ int main() {
 	
 	//MyFirstPPm();
 	//a_clock();
-	//TestSuite test;
-	my_first_sphere_trace();
+	TestSuite test;
+	//my_first_sphere_trace();
 	//if (matrix1._compare(m1, m2))
 	//{
 	//	std::cout << "compare is working effectively" << std::endl;

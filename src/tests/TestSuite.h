@@ -61,6 +61,9 @@ public:
 	bool TestSphereTransformation(const sphere& s, const tup& t);
 	bool TestIntersectingScaledSphere(const ray& r, const sphere& s);
 	bool TestIntersectingTransformedSphere(const ray& r, const sphere& s); 
+	bool TestShapeNormal(const sphere& s, const tup& point);
+	bool TestTranslatedNormal(const sphere& s, const tup& point);
+	bool TestTransformedNormal(const sphere& s, const tup& point);
 
 private:
 	Tuples tups; 

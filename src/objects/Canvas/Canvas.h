@@ -19,11 +19,10 @@ public:
 		createDimensions(w, h);
 	};
 	~Canvas() = default;
+	std::string canvas_to_ppm();
 	void createDimensions(const float& w, const float& h);
 	void write_pixel(const color& c1, const float& w, const float& h);
 	void pixel_at(const float& w, const float& h);
-	std::string canvas_to_ppm();
-	int convert_color_scale(float rgb);
 	void write_ppm();
 	void append_lines();
 	void make_all_pixels(const float& r,const float& b,const float& g);
@@ -39,6 +38,7 @@ public:
 	float _get_width() {
 		return can.width;
 	}
+	int convert_color_scale(float rgb);
 private:
 	canvas can;
 	std::string pixelMapString, pixelMap;
