@@ -70,6 +70,7 @@ intersection Rays::_hit()
 			lowest = x;
 		}
 	}
+	inter.clear();
 	return lowest;
 }
 

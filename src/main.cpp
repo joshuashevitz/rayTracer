@@ -78,40 +78,27 @@ void my_first_sphere_trace()
 	float wall_size = 7.0;
 	float pixelsize = wall_size / 100;
 	float half = wall_size / 2;
+	float world_x = 0, world_y = 0;
 	r.origin = tups.createTuplePoint(0, 0, -5);
-	//std::cout << c._get_height() << " " << c._get_width() << std::endl;
+	s.transform = mats._mat_multiplier(mats._add_shear(1, 0, 0, 0, 0, 0), mats._add_scaling(0.5, 1, 1));
 	for (int y = 0; y <= c._get_height() - 1; y++)
 	{
-		float world_y = half - (pixelsize * y);
-		//std::cout << "this world_y value is " << world_y << std::endl;
+		world_y = half - (pixelsize * y);
+	
 		for (int x = 0; x <= c._get_width() - 1; x++)
 		{
-			float world_x = -half + (pixelsize * x);
-			//std::cout << "The world_x value is " << world_x << std::endl;
+			world_x = -half + (pixelsize * x);
 			wallPoint = tups.createTuplePoint(world_x, world_y, wall_z);
-			//std::cout << "The wall point value is ";
-			//tups.printTuple(wallPoint);
 			r.direction = math.normilize(math.subtTuples(wallPoint, r.origin));
 			rays.intersect(s, r);
-			/*if (rays._get_inters().size() > 0)
-			{
-				std::cout << rays._get_inters().back().t << std::endl;
-			}*/
+
 			if (rays._hit().t > 0)
 			{
 				c.write_pixel(col.createColor(1, 0, 0), x, y);
 			}
 		}
-		/*for (const auto x : rays._get_inters())
-		{
-			std::cout << x.t << " ";
-		}
-		*/
-		//std::cout << rays._get_inters().size() << std::endl;
-		rays._clear();
-		//std::cout << rays._get_inters().size() << std::endl;
 	}
-	//c.write_to_ppm();
+	c.write_to_ppm();
 }
 
 int main() {
