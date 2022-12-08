@@ -33,7 +33,6 @@ public:
 	bool TestMinor(const matrix& m, const int& r, const int& c);
 	bool TestCofactor(const matrix& m, const int& r, const int& c);
 	bool TestDeterminant(const matrix& m);
-	bool TestInvertible(const matrix& m);
 	bool TestInverse(const matrix& m);
 	bool TestInverseMultiple(const matrix& m1, const matrix& m2);
 	bool TestTranslation(const tup& t, const tup& vec);
@@ -64,6 +63,10 @@ public:
 	bool TestShapeNormal(const sphere& s, const tup& point);
 	bool TestTranslatedNormal(const sphere& s, const tup& point);
 	bool TestTransformedNormal(const sphere& s, const tup& point);
+	bool TestReflect45Degree(const tup& in, const tup& normal);
+	bool TestReflectingSlantSurface(const tup& in, const tup& normal);
+	bool TestPointLightValues(const tup& position, const color& c);
+	bool TestDefaultSphereMaterials(const sphere& s);
 
 private:
 	Tuples tups; 

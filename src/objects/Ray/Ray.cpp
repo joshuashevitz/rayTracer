@@ -32,15 +32,13 @@ std::vector<intersection> Rays::intersect(const sphere& s, const ray& r)
 	float b = 2 * math.dotProduct(r2.direction, sphere_to_ray);
 	float c = math.dotProduct(sphere_to_ray, sphere_to_ray) - 1;
 	float discriminant = ((b * b) - (4 * a * c));
-	
+
 	if (discriminant < 0) {
 		return inter;
 	}else 
 	{ 
-		
 		inter.push_back(_init_intersection(s, ((-b) - sqrt(discriminant)) / (2 * a)));
-		inter.push_back(_init_intersection(s, ((-b) + sqrt(discriminant)) / (2 * a)));
-		
+		inter.push_back(_init_intersection(s, ((-b) + sqrt(discriminant)) / (2 * a)));	
 	}
 	return inter;
 }

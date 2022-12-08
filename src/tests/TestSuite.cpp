@@ -45,6 +45,11 @@ TestSuite::TestSuite()
 	const tup& sphereNormal_x = tups.createTuplePoint(1, 0, 0);
 	const tup& sphereNormalTranslated = tups.createTuplePoint(0, 1.70711, -0.70711);
 	const tup& sphereNormalTransformed = tups.createTuplePoint(0, sqrt(2)/2, -sqrt(2)/2);
+	const tup& in = tups.createTupleVector(1, -1, 0);
+	const tup& in2 = tups.createTupleVector(0, -1, 0);
+	const tup& normal = tups.createTupleVector(0, 1, 0);
+	const tup& normal2 = tups.createTupleVector(sqrt(2) / 2, sqrt(2) / 2, 0);
+
 
 	std::vector<float> vec{ 1,2,3,4,5,6,7,8,9,8,7,6,5,4,3,2 };
 	std::vector<float> vec2{ -2,1,2,3,3,2,1,-1,4,3,6,5,1,2,7,8 };
@@ -139,6 +144,8 @@ TestSuite::TestSuite()
 	ASSERT((TestShapeNormal(s1, sphereNormal_x)), "Normalization of x is NOT operating as expected: ");
 	ASSERT((TestTranslatedNormal(s1, sphereNormalTranslated)), "Translated Normal is NOT operating as expected: ");
 	ASSERT((TestTransformedNormal(s1, sphereNormalTransformed)), "Transformed Normal is NOT operating as expected: ");
+	ASSERT((TestReflect45Degree(in, normal)), "Reflecting at 45 degrees is NOT operating as expected: ");
+	ASSERT((TestReflectingSlantSurface(in2, normal2)), "Reflecting off a Slant Surface is NOT operating as expected: ");
 
 	//std::cout << "ALL TESTS HAVE PASSED SUCCESSFULLY" << std::endl;
 	//matrix1._print(matrix1._add_rotation_x((2 * asin(1.0)) / 4));
@@ -723,17 +730,59 @@ bool TestSuite::TestTranslatedNormal(const sphere& s, const tup& point)
 }
 bool TestSuite::TestTransformedNormal(const sphere& s, const tup& point)
 {
-	std::cout << 1 << std::endl;
 	sphere s1 = s;
 	s1.transform = matrix1._mat_multiplier(matrix1._add_scaling(1,0.5,1), matrix1._add_rotation_z(matrix1._get_pi()/5));
-	std::cout << 2 << std::endl;
 	tup norm = SP._normal_at(s1, point);
-	std::cout << 3 << std::endl;
-	tup TestVec = tups.createTupleVector(0, 0.97014, 0.24254);
-	std::cout << 4 << std::endl;
+	tup TestVec = tups.createTupleVector(0, 0.97014, -0.24254);
 	if (comp.equal(norm, TestVec));
 	{
-		tups.printTuple(norm);
+		return true;
+	}
+	return false;
+}
+
+bool TestSuite::TestReflect45Degree(const tup& in, const tup& normal)
+{
+	tup test_vec = tups.createTupleVector(1, 1, 0);
+	if (comp.equal(test_vec, SP._reflect(in, normal)))
+	{
+		return true;
+	}
+
+	return false;
+}
+
+bool TestSuite::TestReflectingSlantSurface(const tup& in, const tup& normal)
+{
+	tup test_vec = tups.createTupleVector(1, 0, 0);
+	tups.printTuple(SP._reflect(in, normal));
+	if (comp.equal(test_vec, SP._reflect(in, normal)))
+	{
+		return true;
+	}
+
+	return false;
+}
+
+bool TestSuite::TestPointLightValues(const tup& position, const color& c)
+{
+	point_light pl; 
+	pl.intensity = c;
+	pl.position = position;
+
+	if (comp.equalC(pl.intensity, c) && comp.equal(pl.position, position))
+	{
+		return true;
+	}
+	return false;
+}
+
+bool TestSuite::TestDefaultSphereMaterials(const sphere& s)
+{
+	material m = s.materials;
+	
+	if (comp.equalC(m.color, s.materials.color) && comp.equalElem(m.ambient, s.materials.ambient) && comp.equalElem(m.diffuse, s.materials.diffuse) && comp.equalElem(m.shininess, s.materials.shininess) && comp.equalElem(m.specular, s.materials.specular))
+	{
 		return true;
 	}
 	return false;

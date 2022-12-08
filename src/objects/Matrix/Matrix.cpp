@@ -88,7 +88,7 @@ bool MatrixOps::_compare(const matrix& a, const matrix& b)
 		for (int j = 0; j <= a.columns-1; j++)
 		{
 			if (abs(a.matrices[i][j]) -  abs(b.matrices[i][j]) > EPSILON) {
-				std::cout << abs(a.matrices[i][j]) - abs(b.matrices[i][j]) << " is greater than: " << EPSILON << std::endl;
+				//std::cout << abs(a.matrices[i][j]) - abs(b.matrices[i][j]) << " is greater than: " << EPSILON << std::endl;
 				return false;
 			}			
 		}

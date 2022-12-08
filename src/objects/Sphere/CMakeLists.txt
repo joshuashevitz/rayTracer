@@ -16,4 +16,5 @@ target_link_libraries(${PROJECT_NAME}
 	PUBLIC tuples
 	PUBLIC matrix
 	PUBLIC algorithms
+	PUBLIC color_tuples
 )
