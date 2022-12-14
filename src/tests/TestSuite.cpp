@@ -49,7 +49,11 @@ TestSuite::TestSuite()
 	const tup& in2 = tups.createTupleVector(0, -1, 0);
 	const tup& normal = tups.createTupleVector(0, 1, 0);
 	const tup& normal2 = tups.createTupleVector(sqrt(2) / 2, sqrt(2) / 2, 0);
-
+	const tup& eyev = tups.createTupleVector(0, 0, -1);
+	const tup& normalv = tups.createTupleVector(0, 0, -1);
+	const tup& zeroPos = tups.createTuplePoint(0, 0, 0);
+	const tup& eyev45 = tups.createTupleVector(0, sqrt(2) / 2, -sqrt(2) / 2);
+	const tup& eyevInPath = tups.createTupleVector(0, -sqrt(2) / 2, -sqrt(2) / 2);
 
 	std::vector<float> vec{ 1,2,3,4,5,6,7,8,9,8,7,6,5,4,3,2 };
 	std::vector<float> vec2{ -2,1,2,3,3,2,1,-1,4,3,6,5,1,2,7,8 };
@@ -88,9 +92,15 @@ TestSuite::TestSuite()
 	
 	sphere s1, s2, s3;
 	s1 = s._init_sphere(s1), s2 = s._init_sphere(s2), s3 = s._init_sphere(s3);
-	std::cout << s1.sid << std::endl;
-	std::cout << s2.sid << std::endl;
+
+	point_light pl;
+	pl.position = tups.createTuplePoint(0, 0, -10);
+	pl.intensity = col.createColor(1, 1, 1);
 	
+	point_light pl2 = pl, pl3 = pl;
+	pl2.position.y = 10;
+	pl3.position.z = 10;
+
 	ray r1 = rays._init_ray(tups.createTuplePoint(0, 0, -5), tups.createTupleVector(0, 0, 1));
 	ray r2 = rays._init_ray(tups.createTuplePoint(0, 1, -5), tups.createTupleVector(0, 0, 1));
 	ray r3 = rays._init_ray(tups.createTuplePoint(0, 2, -5), tups.createTupleVector(0, 0, 1));
@@ -146,7 +156,11 @@ TestSuite::TestSuite()
 	ASSERT((TestTransformedNormal(s1, sphereNormalTransformed)), "Transformed Normal is NOT operating as expected: ");
 	ASSERT((TestReflect45Degree(in, normal)), "Reflecting at 45 degrees is NOT operating as expected: ");
 	ASSERT((TestReflectingSlantSurface(in2, normal2)), "Reflecting off a Slant Surface is NOT operating as expected: ");
-
+	ASSERT((TestEyeBetween(s1.materials, zeroPos, pl, eyev, normalv)), "Lighting with eye between light and object is NOT operating as expected: ");
+	ASSERT((TestEyeAt45(s1.materials, zeroPos, pl, eyev45, normalv)), "Lighting when eye is at a 45 is NOT operating as expected: ");
+	ASSERT((TestLightAt45(s1.materials, zeroPos, pl2, eyev, normalv)), "Lighting when Light is at a 45 is NOT operating as expected: ");
+	ASSERT((TestEyeInReflectPath(s1.materials, zeroPos, pl2, eyevInPath, normalv)), "Eye in Lights reflective path in NOT operating as expected: ");
+	ASSERT((TestLightBehindSurface(s1.materials, zeroPos, pl3, eyev, normalv)), "Light behind surface is NOT operating as expected: ");
 	//std::cout << "ALL TESTS HAVE PASSED SUCCESSFULLY" << std::endl;
 	//matrix1._print(matrix1._add_rotation_x((2 * asin(1.0)) / 4));
 	//tups.printTuple(matrix1._rotate_x(rotate_x,(2 * asin(1.0)) / 2));
@@ -723,7 +737,6 @@ bool TestSuite::TestTranslatedNormal(const sphere& s, const tup& point)
 	tup TestVec = tups.createTupleVector(0, 0.70711, -0.70711);
 	if (comp.equal(norm, TestVec));
 	{
-		tups.printTuple(norm);
 		return true;
 	}
 	return false;
@@ -748,19 +761,16 @@ bool TestSuite::TestReflect45Degree(const tup& in, const tup& normal)
 	{
 		return true;
 	}
-
 	return false;
 }
 
 bool TestSuite::TestReflectingSlantSurface(const tup& in, const tup& normal)
 {
 	tup test_vec = tups.createTupleVector(1, 0, 0);
-	tups.printTuple(SP._reflect(in, normal));
 	if (comp.equal(test_vec, SP._reflect(in, normal)))
 	{
 		return true;
 	}
-
 	return false;
 }
 
@@ -780,8 +790,57 @@ bool TestSuite::TestPointLightValues(const tup& position, const color& c)
 bool TestSuite::TestDefaultSphereMaterials(const sphere& s)
 {
 	material m = s.materials;
-	
 	if (comp.equalC(m.color, s.materials.color) && comp.equalElem(m.ambient, s.materials.ambient) && comp.equalElem(m.diffuse, s.materials.diffuse) && comp.equalElem(m.shininess, s.materials.shininess) && comp.equalElem(m.specular, s.materials.specular))
+	{
+		return true;
+	}
+	return false;
+}
+
+bool TestSuite::TestEyeBetween(const material& m, const tup& point, const point_light& pl, const tup& eyev, const tup& normalv)
+{
+	color result = col.createColor(1.9, 1.9, 1.9);
+	if(comp.equalC(result, SP.lighting(m, point, pl, eyev, normalv)))
+	{
+		return true;
+	}
+	return false;
+}
+
+bool TestSuite::TestEyeAt45(const material& m, const tup& point, const point_light& pl, const tup& eyev, const tup& normalv)
+{
+	color result = col.createColor(1.0, 1.0, 1.0);
+	if (comp.equalC(result, SP.lighting(m, point, pl, eyev, normalv)))
+	{
+		return true;
+	}
+	return false;
+}
+
+bool TestSuite::TestLightAt45(const material& m, const tup& point, const point_light& pl, const tup& eyev, const tup& normalv)
+{
+	color result = col.createColor(0.736396, 0.736396, 0.736396);
+	if (comp.equalC(result, SP.lighting(m, point, pl, eyev, normalv)))
+	{
+		return true;
+	}
+	return false;
+}
+
+bool TestSuite::TestEyeInReflectPath(const material& m, const tup& point, const point_light& pl, const tup& eyev, const tup& normalv)
+{
+	color result = col.createColor(1.63639, 1.63639, 1.63639);
+	if (comp.equalC(result, SP.lighting(m, point, pl, eyev, normalv)))
+	{
+		return true;
+	}
+	return false;
+}
+
+bool TestSuite::TestLightBehindSurface(const material& m, const tup& point, const point_light& pl, const tup& eyev, const tup& normalv)
+{
+	color result = col.createColor(0.1, 0.1, 0.1);
+	if (comp.equalC(result, SP.lighting(m, point, pl, eyev, normalv)))
 	{
 		return true;
 	}

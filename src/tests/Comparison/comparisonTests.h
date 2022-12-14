@@ -35,7 +35,7 @@ public:
 
 	bool equalC(color a, color b)
 	{
-		if ((a.blue == b.blue) && (a.red == b.red) && (a.green == b.green))
+		if (((a.blue - b.blue) <EPSILON) && ((a.red - b.red) < EPSILON) && ((a.green - b.green) < EPSILON))
 		{
 			return true;
 		}

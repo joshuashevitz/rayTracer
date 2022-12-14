@@ -64,3 +64,34 @@ material Sphere::_materials()
 	materials.shininess = 200.0;
 	return materials;
 }
+
+color Sphere::lighting(const material& m, const tup& point, const point_light& pl, const tup& eye, const tup& normal)
+{
+	color effective_color = col.colorMult(m.color, pl.intensity);
+	tup light = math.normilize(math.subtTuples(pl.position, point));
+	color ambient = col.colorScalMul(effective_color, m.ambient);
+	color diffuse;
+	color specular;
+	float light_dot_normal = math.dotProduct(light, normal);
+	if (light_dot_normal < 0)
+	{
+		diffuse = col.createColor(0, 0, 0);
+		specular = col.createColor(0, 0, 0);
+	}
+	else
+	{
+		diffuse = col.colorScalMul(col.colorScalMul(effective_color, m.diffuse), light_dot_normal);
+		tup reflect = _reflect(math.scalarMultiplcation(light, -1), normal);
+		float reflective_dot_eye = math.dotProduct(reflect, eye);
+		if (reflective_dot_eye <= 0)
+		{
+			specular = col.createColor(0, 0, 0);
+		}
+		else
+		{
+			float factor = pow(reflective_dot_eye, m.shininess);
+			specular = col.colorScalMul(col.colorScalMul(pl.intensity, m.specular),factor);
+		}
+	}
+	return col.colorAddition(col.colorAddition(ambient, diffuse),specular);
+}

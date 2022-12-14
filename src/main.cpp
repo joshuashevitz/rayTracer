@@ -71,9 +71,14 @@ void my_first_sphere_trace()
 	MatrixOps mats;
 	Sphere spheres;
 	sphere s = spheres._init_sphere(s);
+	s.materials = spheres._materials();
+	s.materials.color = col.createColor(1, 0.2, 1);
 	Rays rays;
 	ray r;
 	tup wallPoint;
+	point_light pl; 
+	pl.intensity = col.createColor(1, 1, 1);
+	pl.position = tups.createTuplePoint(-10, 10, -10);
 	float wall_z = 10;
 	float wall_size = 7.0;
 	float pixelsize = wall_size / 100;
@@ -81,7 +86,7 @@ void my_first_sphere_trace()
 	float world_x = 0, world_y = 0;
 	r.origin = tups.createTuplePoint(0, 0, -5);
 	//s.transform = mats._mat_multiplier(mats._add_shear(1, 0, 0.5, 0, 1, 0), mats._add_scaling(0.2, 1, 1));
-	s.transform = mats._add_translation(tups.createTuplePoint(0.5, 0, 0.5));
+	//s.transform = mats._add_translation(tups.createTuplePoint(0.5, 0, 0.5));
 	for (int y = 0; y <= c._get_height() - 1; y++)
 	{
 		world_y = half - (pixelsize * y);
@@ -92,11 +97,15 @@ void my_first_sphere_trace()
 			wallPoint = tups.createTuplePoint(world_x, world_y, wall_z);
 			r.direction = math.normilize(math.subtTuples(wallPoint, r.origin));
 			rays.intersect(s, r);
-
+			
 			if (rays._hit().t > 0)
 			{
-				c.write_pixel(col.createColor(1, 0, 0), x, y);
+				tup point = rays._position(r, rays._hit().t);
+				tup normal = spheres._normal_at(rays._get_inters().back().object, point);
+				tup eye = tups._invert(r.direction);
+				c.write_pixel(spheres.lighting(rays._get_inters().back().object.materials, point, pl,eye, normal), x, y);
 			}
+			rays._get_inters().clear();
 		}
 	}
 	c.write_to_ppm();
@@ -106,8 +115,8 @@ int main() {
 	
 	//MyFirstPPm();
 	//a_clock();
-	TestSuite test;
-	//my_first_sphere_trace();
+	//TestSuite test;
+	my_first_sphere_trace();
 	//if (matrix1._compare(m1, m2))
 	//{
 	//	std::cout << "compare is working effectively" << std::endl;

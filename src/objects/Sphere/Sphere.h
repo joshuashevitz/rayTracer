@@ -6,8 +6,6 @@
 #include "simpleMath.h"
 #include "Color.h"
 
-
-
 struct point_light
 {
 	tup position;
@@ -30,6 +28,7 @@ struct sphere
 	matrix transform;
 	material materials;
 };
+
 class Sphere
 {
 public: 
@@ -40,6 +39,7 @@ public:
 	tup _reflect(const tup& in,const tup& normal);
 	material _materials();
 	material _fill_materials(const color& c, const float& ambient, const float& diffuse, const float& shininess, const float& specular);
+	color lighting(const material& m, const tup& point, const point_light& pl, const tup& eye, const tup& normal);
 	void _clear();
 
 private:
@@ -47,4 +47,5 @@ private:
 	MatrixOps mats;
 	Tuples tups;
 	TupleMath math;
+	Color col;
 };

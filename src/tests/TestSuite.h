@@ -67,6 +67,11 @@ public:
 	bool TestReflectingSlantSurface(const tup& in, const tup& normal);
 	bool TestPointLightValues(const tup& position, const color& c);
 	bool TestDefaultSphereMaterials(const sphere& s);
+	bool TestEyeBetween(const material& m, const tup& point, const point_light& pl, const tup& eyev, const tup& normalv);
+	bool TestEyeAt45(const material& m, const tup& point, const point_light& pl, const tup& eyev, const tup& normalv);
+	bool TestLightAt45(const material& m, const tup& point, const point_light& pl, const tup& eyev, const tup& normalv);
+	bool TestEyeInReflectPath(const material& m, const tup& point, const point_light& pl, const tup& eyev, const tup& normalv);
+	bool TestLightBehindSurface(const material& m, const tup& point, const point_light& pl, const tup& eyev, const tup& normalv);
 
 private:
 	Tuples tups; 
