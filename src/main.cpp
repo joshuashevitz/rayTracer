@@ -78,14 +78,14 @@ void my_first_sphere_trace()
 	tup wallPoint;
 	point_light pl; 
 	pl.intensity = col.createColor(1, 1, 1);
-	pl.position = tups.createTuplePoint(-10, 10, -10);
+	pl.position = tups.createTuplePoint(-10, -10, -10);
 	float wall_z = 10;
 	float wall_size = 7.0;
 	float pixelsize = wall_size / 100;
 	float half = wall_size / 2;
 	float world_x = 0, world_y = 0;
 	r.origin = tups.createTuplePoint(0, 0, -5);
-	//s.transform = mats._mat_multiplier(mats._add_shear(1, 0, 0.5, 0, 1, 0), mats._add_scaling(0.2, 1, 1));
+	//s.transform = mats._mat_multiplier(mats._add_shear(1, 0, 0.5, 0, 1, 0), mats._add_scaling(0.8, 1, 1));
 	//s.transform = mats._add_translation(tups.createTuplePoint(0.5, 0, 0.5));
 	for (int y = 0; y <= c._get_height() - 1; y++)
 	{
@@ -97,15 +97,17 @@ void my_first_sphere_trace()
 			wallPoint = tups.createTuplePoint(world_x, world_y, wall_z);
 			r.direction = math.normilize(math.subtTuples(wallPoint, r.origin));
 			rays.intersect(s, r);
-			
-			if (rays._hit().t > 0)
+			intersection i = rays._hit();
+			if (i.t > 0)
 			{
-				tup point = rays._position(r, rays._hit().t);
-				tup normal = spheres._normal_at(rays._get_inters().back().object, point);
+				tup point = rays._position(r, i.t);
+				tup normal = spheres._normal_at(i.object, point);
 				tup eye = tups._invert(r.direction);
-				c.write_pixel(spheres.lighting(rays._get_inters().back().object.materials, point, pl,eye, normal), x, y);
+				c.write_pixel(spheres.lighting(i.object.materials, point, pl,eye, normal), x, y);
+				//c.write_pixel(col.createColor(1, 0.2, 1), x, y);
+				rays._clear();
 			}
-			rays._get_inters().clear();
+			
 		}
 	}
 	c.write_to_ppm();

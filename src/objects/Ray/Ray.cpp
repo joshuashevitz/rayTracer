@@ -14,6 +14,7 @@ void Rays::_clear()
 	R.origin = math.scalarMultiplcation(R.origin, 0);
 	R.origin.w = 1;
 	R.direction = math.scalarMultiplcation(R.direction, 0);
+	inter.clear();
 }
 
 tup Rays::_position(const ray& r, const float& t)
