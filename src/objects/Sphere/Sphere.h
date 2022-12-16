@@ -25,7 +25,7 @@ struct sphere
 {
 	sphere* sid;
 	tup origin;
-	matrix transform;
+	Matrix_4x4 transform;
 	material materials;
 };
 
@@ -44,7 +44,7 @@ public:
 
 private:
 	sphere s;
-	MatrixOps mats;
+	//MatrixOps mats;
 	Tuples tups;
 	TupleMath math;
 	Color col;
