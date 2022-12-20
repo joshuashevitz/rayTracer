@@ -30,6 +30,7 @@ public:
 	bool TestColorMult(const color& c1, const color& c2);
 	bool TestMatrixComparison(const matrix& a, const matrix& b);
 	bool TestSubmatrix(const matrix& m, const int& r, const int& c);
+	bool TestSubmatrix2(const Matrix<float,4,4>& m);
 	bool TestMinor(const matrix& m, const int& r, const int& c);
 	bool TestCofactor(const matrix& m, const int& r, const int& c);
 	bool TestDeterminant(const matrix& m);

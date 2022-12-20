@@ -44,7 +44,7 @@ public:
 
 private:
 	sphere s;
-	//MatrixOps mats;
+	MatrixOps mats;
 	Tuples tups;
 	TupleMath math;
 	Color col;

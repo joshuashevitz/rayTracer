@@ -14,14 +14,18 @@ sphere Sphere::_init_sphere(sphere& s2)
 tup Sphere::_normal_at(const sphere& s, const tup& point)
 {
 	//if (!mats._compare(s.transform, mats._get_identity()))
-  if(s.transform != Matrix_4x4::Identity)
-	{
-		tup object_point = mats._matxtup(mats._inverse(s.transform), point);
-		tup object_normal = math.subtTuples(object_point, tups.createTuplePoint(0, 0, 0));
-		tup world_normal = mats._matxtup(mats._transpose(mats._inverse(s.transform)), object_normal);
-		world_normal.w = 0;
-		return math.normilize(world_normal);
-	}
+	Matrix<float, 4, 4> m1, m2;
+
+	if(s.transform != Matrix_4x4::Identity)
+		{
+			m1 = s.transform.Inverse();
+			s.transform.Submatrix();
+			tup object_point = s.transform.xtup(point);
+			tup object_normal = math.subtTuples(object_point, tups.createTuplePoint(0, 0, 0));
+			tup world_normal = mats._matxtup(mats._transpose(mats._inverse(s.transform.data)), object_normal);
+			world_normal.w = 0;
+			return math.normilize(world_normal);
+		}
 	return math.normilize(math.subtTuples(point, s.origin));
 }
 

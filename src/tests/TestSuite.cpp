@@ -15,6 +15,8 @@
 #include <vector>
 #include "TestSuite.h"
 
+
+#define pi (2*asin(1.0))
 TestSuite::TestSuite() 
 {
 	const tup& a = tups.createTuplePoint(-1, 2, -3);
@@ -396,6 +398,11 @@ bool TestSuite::TestSubmatrix(const matrix& mat, const int& r, const int& c)
 	return false;
 }
 
+bool TestSuite::TestSubmatrix2(const Matrix<float, 4, 4>& m)
+{
+	return false;
+}
+
 bool TestSuite::TestMinor(const matrix& m, const int& r, const int& c)
 {
 	float truth= 25, result = matrix1._minor(m, r, c);
@@ -690,7 +697,7 @@ bool TestSuite::TestScalingRay(const ray& r, const tup& t)
 bool TestSuite::TestSphereTransformation(const sphere& s, const tup& t)
 {
 	sphere s1 = SP._init_sphere(s1);
-	s1.transform = matrix1._add_translation(t);
+	s1.transform.add_translation(t.x, t.y, t.z);
 	
 	return true;
 }
@@ -698,7 +705,7 @@ bool TestSuite::TestSphereTransformation(const sphere& s, const tup& t)
 bool TestSuite::TestIntersectingScaledSphere(const ray& r, const sphere& s)
 {
 	sphere s1 = s;
-	s1.transform = matrix1._add_scaling(2, 2, 2);
+	s1.transform.add_scaler(2, 2, 2);
 	rays.intersect(s1, r);
 	if (rays._get_inters().back().t == 7 && rays._get_inters()[rays._get_inters().size() - 2].t == 3)
 	{
@@ -710,7 +717,7 @@ bool TestSuite::TestIntersectingScaledSphere(const ray& r, const sphere& s)
 bool TestSuite::TestIntersectingTransformedSphere(const ray& r, const sphere& s)
 {
 	sphere s1 = s;
-	s1.transform = matrix1._add_translation(tups.createTupleVector(5, 0, 0));
+	s1.transform.add_translation(5, 0, 0);
 	rays.intersect(s1, r);
 	if (rays._get_inters().back().t == 7)
 	{
@@ -732,7 +739,7 @@ bool TestSuite::TestShapeNormal(const sphere& s, const tup& point)
 bool TestSuite::TestTranslatedNormal(const sphere& s, const tup& point)
 {
 	sphere s1 = s;
-	s1.transform = matrix1._add_translation(tups.createTuplePoint(0, 1, 0));
+	s1.transform.add_translation(0, 1, 0);
 	tup norm = SP._normal_at(s1, point);
 	tup TestVec = tups.createTupleVector(0, 0.70711, -0.70711);
 	if (comp.equal(norm, TestVec));
@@ -744,7 +751,13 @@ bool TestSuite::TestTranslatedNormal(const sphere& s, const tup& point)
 bool TestSuite::TestTransformedNormal(const sphere& s, const tup& point)
 {
 	sphere s1 = s;
-	s1.transform = matrix1._mat_multiplier(matrix1._add_scaling(1,0.5,1), matrix1._add_rotation_z(matrix1._get_pi()/5));
+	Matrix<float, 4, 4> m1, m2;
+	m1.ToIdentity();
+	m1.add_scaler(1, 0.5, 1);
+	m2.ToIdentity();
+	m2.add_rotationZ(pi / 5);
+	s1.transform.xMatrix(m1, m2);
+	//= matrix1._mat_multiplier(matrix1._add_scaling(1, 0.5, 1), matrix1._add_rotation_z(matrix1._get_pi() / 5));
 	tup norm = SP._normal_at(s1, point);
 	tup TestVec = tups.createTupleVector(0, 0.97014, -0.24254);
 	if (comp.equal(norm, TestVec));

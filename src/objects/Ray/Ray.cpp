@@ -72,12 +72,12 @@ intersection Rays::_hit()
 	return lowest;
 }
 
-ray Rays::_transform(const ray& r, const matrix& m)
+ray Rays::_transform(const ray& r, const Matrix<float, 4, 4>& m)
 {
 
 	ray r1 = r;
 	r1.origin = mats._matxtup(m, r.origin);
-	if (m.matrices[0][3] == 0 && m.matrices[1][3] == 0 && m.matrices[2][3] == 0) 
+	if (m.data[0][3] == 0 && m.data[1][3] == 0 && m.data[2][3] == 0) 
 	{
 		r1.direction = mats._matxtup(m, r.direction);
 	}
