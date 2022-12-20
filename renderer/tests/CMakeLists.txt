@@ -28,3 +28,5 @@ target_link_libraries(${PROJECT_NAME}
 	PUBLIC spheres
 	PUBLIC rays
 )
+
+set_property(TARGET ${PROJECT_NAME} PROPERTY FOLDER "Renderer/Tests")

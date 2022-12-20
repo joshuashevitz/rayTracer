@@ -16,3 +16,4 @@ set_property(GLOBAL PROPERTY USE_FOLDERS ON)
 
 # Include the sub-projects
 add_subdirectory("renderer")
+add_subdirectory("app")

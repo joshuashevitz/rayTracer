@@ -1,7 +1,26 @@
-add_subdirectory(Environment)
-add_subdirectory(Projectiles)
-add_subdirectory(Colors)
-add_subdirectory(Canvas)
-add_subdirectory(Matrix)
-add_subdirectory(Ray)
-add_subdirectory(Sphere)
+project(Objects)
+
+# Source and Include files
+list(APPEND OBJECTS_SOURCE
+  "src/Canvas.cpp"
+  "src/Environment.cpp"
+  "src/Projectiles.cpp"
+  "src/Sphere.cpp"
+)
+
+file(GLOB OBJECTS_INCLUDE "*.h")
+
+
+# Create the library
+add_library(${PROJECT_NAME}
+  ${OBJECTS_SOURCE}
+  ${OBJECTS_INCLUDE}
+)
+add_library(Renderer::Objects ALIAS ${PROJECT_NAME})
+
+
+target_include_directories(${PROJECT_NAME}
+  PUBLIC "${CMAKE_CURRENT_LIST_DIR}"
+)
+
+set_property(TARGET ${PROJECT_NAME} PROPERTY FOLDER "Renderer")
