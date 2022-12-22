@@ -1,4 +1,4 @@
-#include "Ray.h"
+#include "objects/Ray.h"
 
 
 ray Rays::_init_ray(const tup& origin, const tup& direction)

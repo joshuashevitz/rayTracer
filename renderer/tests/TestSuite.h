@@ -1,12 +1,12 @@
 #pragma once
 
-#include "comparisonTests.h"
-#include "tuples.h"
-#include "simpleMath.h"
-#include "Color.h"
-#include "matrix.h"
-#include "Sphere.h"
-#include "Ray.h"
+#include <math/comparisonTests.h>
+#include <math/tuples.h>
+#include <math/simpleMath.h>
+#include <core/Color.h>
+#include <math/Matrix.h>
+#include <objects/Sphere.h>
+#include <objects/Ray.h>
 
 class TestSuite
 {

@@ -1,4 +1,6 @@
-#include "simpleMath.h"
+#include "math/simpleMath.h"
+
+#include <iostream>
 
 tup TupleMath::addTuples(tup a, tup b) 
 {

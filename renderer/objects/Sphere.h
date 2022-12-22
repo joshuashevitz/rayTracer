@@ -1,10 +1,9 @@
 #pragma once
 
-#include <iostream>
-#include "Tuples.h"
-#include "Matrix.h" 
-#include "simpleMath.h"
-#include "Color.h"
+#include <math/tuples.h>
+#include <math/Matrix.h>
+#include <math/simpleMath.h>
+#include <core/Color.h>
 
 struct point_light
 {

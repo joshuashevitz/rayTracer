@@ -1,10 +1,8 @@
 #pragma once
 
-#include <iostream>
-#include <thread>
-#include <tuple>
-#include "tuples.h"
-#include "Color.h"
+#include "core/Color.h"
+
+#include "math/tuples.h"
 
 class Comparison
 {

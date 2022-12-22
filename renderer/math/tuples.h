@@ -1,8 +1,6 @@
 #pragma once
 
 #include <iostream>
-#include <thread>
-#include <tuple>
 
 struct tup {
 	float x;

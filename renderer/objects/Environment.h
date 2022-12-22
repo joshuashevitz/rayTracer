@@ -1,8 +1,9 @@
 #pragma once
 
 #include <iostream>
-#include "tuples.h"
-#include "simpleMath.h"
+
+#include <math/tuples.h>
+#include <math/simpleMath.h>
 
 struct environment
 {

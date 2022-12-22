@@ -1,9 +1,9 @@
 #pragma once 
 
-#include <iostream>
-#include "simpleMath.h"
-#include "tuples.h"
-#include "../Environment/Environment.h"
+#include "objects/Environment.h"
+
+#include <math/simpleMath.h>
+#include <math/tuples.h>
 
 struct projectile
 {

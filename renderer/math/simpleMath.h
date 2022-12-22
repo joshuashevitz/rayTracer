@@ -1,9 +1,6 @@
 #pragma once
 
-#include <cmath>
-#include <math.h>
-#include <iostream>
-#include "../Tuples/tuples.h"
+#include "math/tuples.h"
 
 class TupleMath
 {

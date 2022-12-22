@@ -1,4 +1,6 @@
-#include "Matrix.h"
+#include "math/Matrix.h"
+
+#include <iostream>
 
 void MatrixOps::create(const int& rows, const int& col) 
 {

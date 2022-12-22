@@ -2,14 +2,16 @@
 #include <chrono>
 #include <thread>
 
-#include "tuples.h"
-#include "simpleMath.h"
-#include "TestSuite.h"
-#include "Environment.h"
-#include "Projectiles.h"
-#include "comparisonTests.h"
-#include "Canvas.h"
-#include "Matrix.h"
+#include <math/tuples.h>
+#include <math/simpleMath.h>
+#include <objects/Environment.h>
+#include <objects/Projectiles.h>
+//#include <tests/TestSuite.h>
+#include <math/comparisonTests.h>
+#include <objects/Canvas.h>
+#include <objects/Sphere.h>
+#include <objects/Ray.h>
+#include <math/Matrix.h>
 
 const double pi = 2 * asin(1.0);
 

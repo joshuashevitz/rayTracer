@@ -1,4 +1,4 @@
-#include "Color.h"
+#include "core/Color.h"
 
 color Color::createColor(float red, float blue, float green)
 {

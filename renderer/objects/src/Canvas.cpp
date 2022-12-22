@@ -1,8 +1,10 @@
-#include "Canvas.h"
+#include "objects/Canvas.h"
 
 #include <string>
 #include <math.h>
 #include <fstream>
+
+
 void Canvas::createDimensions(const float& w, const float& h)
 {
 	can.height = h;

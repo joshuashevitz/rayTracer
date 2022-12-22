@@ -1,11 +1,12 @@
 #pragma once
 
-#include <iostream>
-#include "tuples.h"
-#include "simpleMath.h"
+#include <math/tuples.h>
+#include <math/simpleMath.h>
+#include <math/Matrix.h>
+
+#include <objects/Sphere.h>
+
 #include <vector>
-#include "Sphere.h"
-#include "matrix.h"
 
 struct ray
 {

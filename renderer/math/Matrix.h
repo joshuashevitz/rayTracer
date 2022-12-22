@@ -1,8 +1,8 @@
 #pragma once
 
+#include "math/tuples.h"
+
 #include <vector>
-#include <iostream>
-#include "tuples.h"
 
 struct matrix
 {
