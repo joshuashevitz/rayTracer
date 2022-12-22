@@ -25,10 +25,27 @@ namespace Math{
   };
 
   template<typename T>
+  T Dot(const Tuple3<T> &t1, const Tuple3<T> &t2){
+    return (t1.x * t2.x) + (t1.y * t2.y) + (t1.z * t2.z);
+  }
+
+  template<typename T>
+  T Magnitude(const Tuple3<T> &t){
+    return std::sqrt((t.x * t.x) + (t.y * t.y) + (t.z * t.z));
+  }
+
+  template<typename T>
+  Tuple3<T> Normalize(const Tuple3<T> &t){
+    float magnitude = Magnitude(t);
+    return {t.x / magnitude, t.y / magnitude, t.z / magnitude};
+  }
+
+  template<typename T>
   std::ostream &operator<<(std::ostream &os, const Tuple3<T> &t){
     os << "{" << t.x << ", " << t.y << ", " << t.z << "}";
     return os;
   }
+
 
   typedef Tuple3<float> Vec3F;
   typedef Tuple3<double> Vec3D;
@@ -54,6 +71,11 @@ namespace Math{
       return Tuple3(x + first.x, y + first.y, z + first.z, w + first.w);
     }
   };
+
+  template<typename T>
+  T Dot(const Tuple4<T> &t1, const Tuple4<T> &t2){
+    return (t1.x * t2.x) + (t1.y * t2.y) + (t1.z * t2.z) + (t1.w * t2.w);
+  }
 
   template<typename T>
   std::ostream &operator<<(std::ostream &os, const Tuple4<T> &t){

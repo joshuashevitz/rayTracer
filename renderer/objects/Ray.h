@@ -8,9 +8,31 @@
 
 #include <vector>
 
+namespace Objects{
+  template<typename T>
+  class Ray{
+  public:
+    struct Hit{
+      
+    };
+
+    Math::Tuple3<T> origin;
+    Math::Tuple3<T> direction;
+
+    Ray() = default;
+    Ray(Math::Tuple3<T> origin, Math::Tuple3<T> direction): origin(origin), direction(direction){}
+
+    bool Intersect(const sphere &s, Hit &hit){
+      return false;
+    }
+
+  private:
+  };
+}
+
 struct ray
 {
-	tup origin; 
+	tup origin;
 	tup direction;
 };
 
