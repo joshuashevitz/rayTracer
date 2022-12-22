@@ -15,10 +15,20 @@ namespace Math{
     Tuple3() = default;
     Tuple3(T x, T y, T z): x(x), y(y), z(z){}
 
+    Tuple3 Invert(){
+      return Tuple3(x * -1, y * -1, z * -1);
+    }
+
     Tuple3 operator+ (const Tuple3 &first) const{
       return Tuple3(x + first.x, y + first.y, z + first.z);
     }
   };
+
+  template<typename T>
+  std::ostream &operator<<(std::ostream &os, const Tuple3<T> &t){
+    os << "{" << t.x << ", " << t.y << ", " << t.z << "}";
+    return os;
+  }
 
   typedef Tuple3<float> Vec3F;
   typedef Tuple3<double> Vec3D;
@@ -36,10 +46,20 @@ namespace Math{
     Tuple4() = default;
     Tuple4(T x, T y, T z, T w): x(x), y(y), z(z), w(w){}
 
+    Tuple4 Invert(){
+      return Tuple4(x * -1, y * -1, z * -1, w * -1);
+    }
+
     Tuple4 operator+ (const Tuple4 &first) const{
       return Tuple3(x + first.x, y + first.y, z + first.z, w + first.w);
     }
   };
+
+  template<typename T>
+  std::ostream &operator<<(std::ostream &os, const Tuple4<T> &t){
+    os << "{" << t.x << ", " << t.y << ", " << t.z << ", " << t.w << "}";
+    return os;
+  }
 
   typedef Tuple4<float> Vec4F;
   typedef Tuple4<double> Vec4D;
