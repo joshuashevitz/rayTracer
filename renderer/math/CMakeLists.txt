@@ -5,6 +5,7 @@ list(APPEND MATH_SOURCE
   "src/Matrix.cpp"
   "src/simpleMath.cpp"
   "src/tuples.cpp"
+  "src/Transformation.cpp"
   "src/comparisonTests.cpp"
 )
 
