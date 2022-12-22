@@ -13,6 +13,8 @@
 #include <objects/Ray.h>
 #include <math/Matrix.h>
 
+#include "app/Visualizer.h"
+
 const double pi = 2 * asin(1.0);
 
 void MyFirstPPm() {
@@ -66,6 +68,9 @@ void a_clock()
 }
 void my_first_sphere_trace()
 {
+  // Create our visualizer.
+  Renderer::Display display(100, 100);
+
 	Color col;
 	Canvas c(100, 100);
 	Tuples tups;
@@ -110,9 +115,22 @@ void my_first_sphere_trace()
 				rays._clear();
 			}
 			
+
+      display.Update();
+      if(!display.IsRunning()){
+        return;
+      }else{
+        display.DrawCanvas(c.can);
+      }
+
 		}
 	}
 	c.write_to_ppm();
+
+
+  while(display.IsRunning()){
+    display.Update();
+  }
 }
 
 int main() {

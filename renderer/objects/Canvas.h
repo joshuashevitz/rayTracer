@@ -15,6 +15,8 @@ struct canvas {
 class Canvas
 {
 public: 
+  canvas can;
+
 	Canvas(const float& w, const float& h) {
 		createDimensions(w, h);
 	};
@@ -40,6 +42,6 @@ public:
 	}
 	int convert_color_scale(float rgb);
 private:
-	canvas can;
+	
 	std::string pixelMapString, pixelMap;
 };
