@@ -2,6 +2,49 @@
 
 #include <iostream>
 
+namespace Math{
+  template<typename T>
+  struct Tuple3{
+    union{
+      struct { T x, y, z; };
+      struct { T r, g, b; };
+
+      T data[3];
+    };
+
+    Tuple3() = default;
+    Tuple3(T x, T y, T z): x(x), y(y), z(z){}
+
+    Tuple3 operator+ (const Tuple3 &first) const{
+      return Tuple3(x + first.x, y + first.y, z + first.z);
+    }
+  };
+
+  typedef Tuple3<float> Vec3F;
+  typedef Tuple3<double> Vec3D;
+
+
+  template<typename T>
+  struct Tuple4{
+    union {
+      struct { T x, y, z, w; };
+      struct { T r, g, b, a; };
+
+      T data[4];
+    };
+
+    Tuple4() = default;
+    Tuple4(T x, T y, T z, T w): x(x), y(y), z(z), w(w){}
+
+    Tuple4 operator+ (const Tuple4 &first) const{
+      return Tuple3(x + first.x, y + first.y, z + first.z, w + first.w);
+    }
+  };
+
+  typedef Tuple4<float> Vec4F;
+  typedef Tuple4<double> Vec4D;
+}
+
 struct tup {
 	float x;
 	float y;
