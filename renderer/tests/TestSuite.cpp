@@ -64,9 +64,11 @@ TestSuite::TestSuite()
 	std::vector<float> original{3, -9, 7, 3, 3, -8, 2, -9, -4, 4, 4, 1, -6, 5, -1, 1};
 	std::vector<float> notOriginal{ 8,2,2,2,3,-1,7,0,7,0,5,4,6,-2,0,5 };
 
-	matrix m1, m2, m3, m4, m5, m6, m7, m8;
-	m1 = matrix1._create(4, 4);
-	m1 = matrix1.populate_matrix(vec);
+	Matrix_4x4 m1;
+	Matrix_3x3 m9;
+	m1.Fill(vec);
+	m9.Fill(vec4);
+	matrix m2, m3, m4, m5, m6, m7, m8;
 
 	m2 = matrix1._create(4, 4);
 	m2 = matrix1.populate_matrix(vec2);
@@ -122,7 +124,7 @@ TestSuite::TestSuite()
 	ASSERT((TestDotProd(dot, prod, 20.0)), "Dot Product is NOT operating correctly: ");
 	ASSERT((TestCrossProd(dot, prod)), "Cross Product is NOT being calculated correctly: ");
 	ASSERT((TestSubmatrix(m1, 2, 1)), "Submatrix is NOT operating as it should be: ");
-	ASSERT((TestMinor(m4, 1, 0)), "NOT calculating the minor correctly: ");
+	ASSERT((TestMinor(m9, 1, 0)), "NOT calculating the minor correctly: ");
 	ASSERT((TestCofactor(m4, 1, 0)), "Cofactor is NOT being deterimined correctly: ");
 	ASSERT((TestDeterminant(m5)), "Detetminant of 4x4 matrix operations NOT operating correctly: ");
 	ASSERT((TestInverse(m6)),"Did NOT invert correctly: ");
@@ -382,48 +384,27 @@ bool TestSuite::TestMatrixComparison(const Matrix_4x4& a, const Matrix_4x4& b)
 	return false;
 }
 
-bool TestSuite::TestSubmatrix(const matrix& mat, const int& r, const int& c)
+bool TestSuite::TestSubmatrix(const Matrix_4x4& mat, const int& r, const int& c)
 {
-	Matrix_4x4 a, b1, c1;
-	Matrix_3x3 b;
-	a.add_scaler(2.0, 3.0, 4.0);
-	b = a.Submatrix(a, 0, 0);
-
-	//for (std::size_t row = 0; row < a.GetRow(); row++)
-	//{
-	//	for (std::size_t col = 0; col < a.GetCol(); col++)
-	//	{
-	//		std::cout << a.data[row][col] << " : ";
-	//	}
-	//	std::cout << std::endl;
-	//}
-	//
-	//for (std::size_t row = 0; row < b.GetRow(); row++)
-	//{
-	//	for (std::size_t col = 0; col < b.GetCol(); col++)
-	//	{
-	//		std::cout << b.data[row][col] << " : ";
-	//	}
-	//	std::cout << std::endl;
-	//}
-
-	matrix m;
-	m = matrix1._create(3, 3);
+	Matrix_4x4 a = mat;
+	Matrix_3x3 b, b1;
+	b = a.Submatrix(a, r, c);
 	std::vector<float> testvector{ 1, 3, 4,
 								   5, 7, 8,
 								   5, 3, 2}; 
-
-	m = matrix1.populate_matrix(testvector);
-	if (matrix1._compare(m, matrix1._submatrix(mat, r, c)))
+	b1.Fill(testvector);
+	if (b == b1)
 	{
 		return true;
 	}
 	return false;
 }
 
-bool TestSuite::TestMinor(const matrix& m, const int& r, const int& c)
+bool TestSuite::TestMinor(const Matrix_3x3& m, const int& r, const int& c)
 {
-	float truth= 25, result = matrix1._minor(m, r, c);
+	Matrix_3x3 a = m, b;
+	float result = a.Minor(a,r,c);
+	float truth = 25;
 	if (result == truth)
 	{
 		return true;

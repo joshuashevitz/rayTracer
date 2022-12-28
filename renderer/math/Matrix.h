@@ -89,43 +89,42 @@ public:
         }
     }
 
- 
+    void Fill(const std::vector<float>& v)
+    {
+        int i = 0;
+        for (size_t row = 0; row < row_count; row++)
+        {
+            for (size_t col = 0; col < column_count; col++)
+            {
+                data[row][col] = v[i];
+                i++;
+            }
+        }
+    }
+
     Matrix<type, row_count-1, column_count-1> Submatrix( Matrix<float, row_count, column_count>& m, size_t r, size_t c) {
         // Check if we are trying to create a sub-matrix of the same size as the current one.
 
-        for (size_t ro = 0; ro < m.GetRow(); ro++)
-        {
-            for (size_t co = 0; co < m.GetCol(); co++)
-            {
-                std::cout << m.data[ro][co] << " ";
-            }
-            std::cout << std::endl;
-        }
-
-        std::size_t row = m.GetRow() - 1, col = m.GetCol() - 1;
+        std::size_t row = m.GetRow() , col = m.GetCol();
         Matrix<float, row_count - 1, column_count - 1> subMatrix;
-
         if (row_count-1 == row_count && column_count-1 == column_count) {
             return subMatrix;
         }
-        std::size_t currentr = 0.0f, currentc = 0.0f;
+        std::size_t currentr = 0, currentc = 0;
         for (std::size_t rows = 0; rows < row; rows++) {
             if (rows != r)
             {
-                
                 for (std::size_t column = 0; column < col; column++) {
                     if (column != c)
-                    {
-                        subMatrix.data[currentr][currentc] = m.data[row][column];
-                        //std::cout << data[row][column] << std::endl;
+                    {                       
+                        subMatrix.data[currentr][currentc] = data[rows][column];
                         currentc++;
                     }
                 }
+                currentc = 0;
                 currentr++;
-            }
-            
+            }          
         }
-
         return subMatrix;
     }
 
@@ -162,7 +161,7 @@ public:
         data[0][1] = sin(r);
     }
 
-    float Determinant(const Matrix<type, row_count, column_count>& mat)
+    float Determinant(Matrix<type, row_count, column_count>& mat)
     {
         float det = 0.0f;
         if(mat.GetRow() > 2 || mat.GetCol() > 2)
@@ -173,10 +172,10 @@ public:
             }
             return det;
         }
-        return ((data[0][0] * data[1][1]) - (data[0][1] * data[1][0]));
+        return ((mat.data[0][0] * mat.data[1][1]) - (mat.data[0][1] * mat.data[1][0]));
     }
 
-    float Cofactor(const Matrix<type, row_count, column_count>& m, const int r, const int c)
+    float Cofactor(Matrix<type, row_count, column_count>& m, const int r, const int c)
     {
         float result = Minor(m, r, c);
         if (((c + r) % 2) == 0)
@@ -188,15 +187,13 @@ public:
         }
     }
 
-    float Minor(const Matrix<type, row_count, column_count>& mat, const int r, const int c) 
+    float Minor(Matrix<type, row_count, column_count>& mat, const int r, const int c) 
     {
-
-
         if (mat.GetRow() == 2)
         {
             return Determinant(mat);
         }
-        auto subMat = Submatrix(r,c);
+        auto subMat = Submatrix(mat, r, c);
         return Determinant(subMat);
         // Idk probably do something math-y here.
     }
@@ -268,5 +265,19 @@ inline bool operator==(const Matrix_4x4& lhs, const Matrix_4x4& rhs) {
 }
 
 inline bool operator!=(const Matrix_4x4& lhs, const Matrix_4x4& rhs) {
+    return !(lhs == rhs);
+}
+
+inline bool operator==(const Matrix_3x3& lhs, const Matrix_3x3& rhs) {
+    for (std::size_t i = 0; i < 3 * 3; i++) {
+        if (std::abs(((float*)lhs.data)[i]) - std::abs(((float*)rhs.data)[i]) > EPSILON_F) {
+            return false;
+        }
+    }
+
+    return true;
+}
+
+inline bool operator!=(const Matrix_3x3& lhs, const Matrix_3x3& rhs) {
     return !(lhs == rhs);
 }
