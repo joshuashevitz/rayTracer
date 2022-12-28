@@ -371,9 +371,11 @@ bool TestSuite::TestColorMult(const color& c1, const color& c2)
 	}
 }
 
-bool TestSuite::TestMatrixComparison(const matrix& a, const matrix& b) 
+bool TestSuite::TestMatrixComparison(const Matrix_4x4& a, const Matrix_4x4& b)
 {
-	if (!matrix1._compare(a, b))
+	Matrix<float, 4u, 4u> matA = a;
+	matA.add_rotationX(2.0);
+	if (matA != b)
 	{
 		return true;
 	}
@@ -382,6 +384,29 @@ bool TestSuite::TestMatrixComparison(const matrix& a, const matrix& b)
 
 bool TestSuite::TestSubmatrix(const matrix& mat, const int& r, const int& c)
 {
+	Matrix_4x4 a, b1, c1;
+	Matrix_3x3 b;
+	a.add_scaler(2.0, 3.0, 4.0);
+	b = a.Submatrix(a, 0, 0);
+
+	//for (std::size_t row = 0; row < a.GetRow(); row++)
+	//{
+	//	for (std::size_t col = 0; col < a.GetCol(); col++)
+	//	{
+	//		std::cout << a.data[row][col] << " : ";
+	//	}
+	//	std::cout << std::endl;
+	//}
+	//
+	//for (std::size_t row = 0; row < b.GetRow(); row++)
+	//{
+	//	for (std::size_t col = 0; col < b.GetCol(); col++)
+	//	{
+	//		std::cout << b.data[row][col] << " : ";
+	//	}
+	//	std::cout << std::endl;
+	//}
+
 	matrix m;
 	m = matrix1._create(3, 3);
 	std::vector<float> testvector{ 1, 3, 4,

@@ -28,7 +28,7 @@ public:
 	bool colorEqual(const color& a, const color& b);
 	bool TestColorScalMul(const color& a, const float& m);
 	bool TestColorMult(const color& c1, const color& c2);
-	bool TestMatrixComparison(const matrix& a, const matrix& b);
+	bool TestMatrixComparison(const Matrix_4x4& a, const Matrix_4x4& b);
 	bool TestSubmatrix(const matrix& m, const int& r, const int& c);
 	bool TestMinor(const matrix& m, const int& r, const int& c);
 	bool TestCofactor(const matrix& m, const int& r, const int& c);
