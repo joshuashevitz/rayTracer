@@ -6,5 +6,5 @@ else
 	cd build
 fi
 
-cmake ../src/
+cmake ../
 
