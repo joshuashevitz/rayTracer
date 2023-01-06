@@ -65,9 +65,10 @@ TestSuite::TestSuite()
 	std::vector<float> notOriginal{ 8,2,2,2,3,-1,7,0,7,0,5,4,6,-2,0,5 };
 
 	Matrix_4x4 m1;
-	Matrix_3x3 m9;
+	Matrix_3x3 m9, m11;
 	m1.Fill(vec);
 	m9.Fill(vec4);
+	m11.Fill(vec4);
 	matrix m2, m3, m4, m5, m6, m7, m8;
 
 	m2 = matrix1._create(4, 4);
@@ -125,7 +126,7 @@ TestSuite::TestSuite()
 	ASSERT((TestCrossProd(dot, prod)), "Cross Product is NOT being calculated correctly: ");
 	ASSERT((TestSubmatrix(m1, 2, 1)), "Submatrix is NOT operating as it should be: ");
 	ASSERT((TestMinor(m9, 1, 0)), "NOT calculating the minor correctly: ");
-	ASSERT((TestCofactor(m4, 1, 0)), "Cofactor is NOT being deterimined correctly: ");
+	ASSERT((TestCofactor(m11, 1, 0)), "Cofactor is NOT being deterimined correctly: ");
 	ASSERT((TestDeterminant(m5)), "Detetminant of 4x4 matrix operations NOT operating correctly: ");
 	ASSERT((TestInverse(m6)),"Did NOT invert correctly: ");
 	ASSERT((TestInverseMultiple(m7, m8)), "Inverse Multiple is NOT operating correctly: ");
@@ -388,7 +389,8 @@ bool TestSuite::TestSubmatrix(const Matrix_4x4& mat, const int& r, const int& c)
 {
 	Matrix_4x4 a = mat;
 	Matrix_3x3 b, b1;
-	b = a.Submatrix(a, r, c);
+	b = Submatrix(a, r, c);
+
 	std::vector<float> testvector{ 1, 3, 4,
 								   5, 7, 8,
 								   5, 3, 2}; 
@@ -403,8 +405,9 @@ bool TestSuite::TestSubmatrix(const Matrix_4x4& mat, const int& r, const int& c)
 bool TestSuite::TestMinor(const Matrix_3x3& m, const int& r, const int& c)
 {
 	Matrix_3x3 a = m, b;
-	float result = a.Minor(a,r,c);
+	float result = Minor<3, 3>(a, r, c);
 	float truth = 25;
+	//float result = 25;
 	if (result == truth)
 	{
 		return true;
@@ -412,9 +415,10 @@ bool TestSuite::TestMinor(const Matrix_3x3& m, const int& r, const int& c)
 	return false;
 }
 
-bool TestSuite::TestCofactor(const matrix& m, const int& r, const int& c)
+bool TestSuite::TestCofactor(const Matrix_3x3& m, const int& r, const int& c)
 {
-	float result = matrix1._cofactor(m, r, c), truth = -25;
+	Matrix_3x3 m1 = m;
+	float result = Cofactor<3,3>(m1, r, c), truth = -25;
 	if (result == truth)
 	{
 		return true;

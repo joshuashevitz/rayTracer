@@ -31,7 +31,7 @@ public:
 	bool TestMatrixComparison(const Matrix_4x4& a, const Matrix_4x4& b);
 	bool TestSubmatrix(const Matrix_4x4& m, const int& r, const int& c);
 	bool TestMinor(const Matrix_3x3& m, const int& r, const int& c);
-	bool TestCofactor(const matrix& m, const int& r, const int& c);
+	bool TestCofactor(const Matrix_3x3& m, const int& r, const int& c);
 	bool TestDeterminant(const matrix& m);
 	bool TestInverse(const matrix& m);
 	bool TestInverseMultiple(const matrix& m1, const matrix& m2);
