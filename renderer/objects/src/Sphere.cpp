@@ -11,14 +11,29 @@ sphere Sphere::_init_sphere(sphere& s2)
 	return s;
 }
 
-tup Sphere::_normal_at(const sphere& s, const tup& point)
+tup Sphere::_normal_at( sphere& s, const tup& point)
 {
 	if (!mats._compare(s.transform, mats._get_identity()))
 	{
+		Matrix_4x4 inverse = s.transform1.Inverse(s.transform1), transpose = inverse.Transpose();
+		/*for (std::size_t i = 0; i < inverse.GetRow(); i++)
+		{
+			for (std::size_t j = 0; j < inverse.GetCol(); j++)
+			{
+				std::cout << transpose.data[i][j] << " ";
+			}
+			std::cout << std::endl;
+		}*/
+		tup op = inverse.xtup(point);
 		tup object_point = mats._matxtup(mats._inverse(s.transform), point);
+		tups.printTuple(op);
+		tups.printTuple(object_point);
 		tup object_normal = math.subtTuples(object_point, tups.createTuplePoint(0, 0, 0));
+		tup wn = transpose.xtup(object_normal);
 		tup world_normal = mats._matxtup(mats._transpose(mats._inverse(s.transform)), object_normal);
 		world_normal.w = 0;
+		//tups.printTuple(wn);
+		//tups.printTuple(world_normal);
 		return math.normilize(world_normal);
 	}
 	return math.normilize(math.subtTuples(point, s.origin));

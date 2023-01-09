@@ -64,34 +64,15 @@ TestSuite::TestSuite()
 	std::vector<float> original{3, -9, 7, 3, 3, -8, 2, -9, -4, 4, 4, 1, -6, 5, -1, 1};
 	std::vector<float> notOriginal{ 8,2,2,2,3,-1,7,0,7,0,5,4,6,-2,0,5 };
 
-	Matrix_4x4 m1;
+	Matrix_4x4 m1, m12, m13, m14, m15;
 	Matrix_3x3 m9, m11;
 	m1.Fill(vec);
 	m9.Fill(vec4);
 	m11.Fill(vec4);
-	matrix m2, m3, m4, m5, m6, m7, m8;
-
-	m2 = matrix1._create(4, 4);
-	m2 = matrix1.populate_matrix(vec2);
-
-	m3 = matrix1._create(4, 4);
-	m3 = matrix1.populate_matrix(vec3);
-
-	m4 = matrix1._create(3, 3);
-	m4 = matrix1.populate_matrix(vec4);
-
-	m5 = matrix1._create(4, 4);
-	m5 = matrix1.populate_matrix(fourxfour);
-
-	m6 = matrix1._create(4, 4);
-	m6 = matrix1.populate_matrix(invert);
-	
-	m7 = matrix1._create(4, 4);
-	m7 = matrix1.populate_matrix(original);
-
-	m8 = matrix1._create(4, 4);
-	m8 = matrix1.populate_matrix(notOriginal);
-
+	m12.Fill(fourxfour);
+	m13.Fill(invert);
+	m14.Fill(original);
+	m15.Fill(notOriginal);
 	
 	sphere s1, s2, s3;
 	s1 = s._init_sphere(s1), s2 = s._init_sphere(s2), s3 = s._init_sphere(s3);
@@ -127,9 +108,9 @@ TestSuite::TestSuite()
 	ASSERT((TestSubmatrix(m1, 2, 1)), "Submatrix is NOT operating as it should be: ");
 	ASSERT((TestMinor(m9, 1, 0)), "NOT calculating the minor correctly: ");
 	ASSERT((TestCofactor(m11, 1, 0)), "Cofactor is NOT being deterimined correctly: ");
-	ASSERT((TestDeterminant(m5)), "Detetminant of 4x4 matrix operations NOT operating correctly: ");
-	ASSERT((TestInverse(m6)),"Did NOT invert correctly: ");
-	ASSERT((TestInverseMultiple(m7, m8)), "Inverse Multiple is NOT operating correctly: ");
+	ASSERT((TestDeterminant(m12)), "Detetminant of 4x4 matrix operations NOT operating correctly: ");
+	ASSERT((TestInverse(m13)),"Did NOT invert correctly: ");
+	ASSERT((TestInverseMultiple(m14, m15)), "Inverse Multiple is NOT operating correctly: ");
 	ASSERT((TestTranslation(transPoint, translate)), "Translation is NOT operating correctly: ");
 	ASSERT((TestInverseTranslation(transPoint, translate)), "Inverse Translation did NOT operate correctly: ");
 	ASSERT((TestScaling(scalable, scaler)), "Scaling NOT operating correctly: ");
@@ -407,7 +388,6 @@ bool TestSuite::TestMinor(const Matrix_3x3& m, const int& r, const int& c)
 	Matrix_3x3 a = m, b;
 	float result = Minor<3, 3>(a, r, c);
 	float truth = 25;
-	//float result = 25;
 	if (result == truth)
 	{
 		return true;
@@ -426,9 +406,10 @@ bool TestSuite::TestCofactor(const Matrix_3x3& m, const int& r, const int& c)
 	return false;
 }
 
-bool TestSuite::TestDeterminant(const matrix& m)
+bool TestSuite::TestDeterminant(const Matrix_4x4& m)
 {
-	float result = matrix1._2d_determinant(m);
+	Matrix_4x4 m1 = m;
+	float result = Determinant(m1);
 	if (result == (-4071))
 	{
 		return true;
@@ -436,30 +417,38 @@ bool TestSuite::TestDeterminant(const matrix& m)
 	return false;
 }
 
-bool TestSuite::TestInverse(const matrix& m)
+bool TestSuite::TestInverse(const Matrix_4x4& m)
 {
-	matrix test, m2;
+	Matrix_4x4 inverted, test, m1 = m;
+	inverted = m1.Inverse(m1);
+	//for (std::size_t i = 0; i < m1.GetRow(); i++)
+	//{
+	//	for (std::size_t j = 0; j < m1.GetCol(); j++)
+	//	{
+	//		std::cout << inverted.data[i][j] << " ";
+	//	}
+	//	std::cout << std::endl;
+	//}
 	std::vector<float> inverse{ 0.218045f, 0.451128f, 0.240602f, -0.0451128f,
 							   -0.808271f, -1.45677f, -0.443609f, 0.520677f,
 							   -0.0789474f, -0.223684f, -0.0526316f, 0.197368f,
 							   -0.522556f, -0.81391f, -0.300752f, 0.306391f };
-	test = matrix1._create(4, 4);
-	test = matrix1.populate_matrix(inverse);
-	m2 = matrix1._create(4, 4);
-	m2 = matrix1._inverse(m);
+	test.Fill(inverse);
 
-	return matrix1._compare(matrix1._inverse(m), matrix1._inverse(m));
+	if (inverted == test)
+	{
+		return true;
+	}
+	return false;
 }
 
-bool TestSuite::TestInverseMultiple(const matrix& m1, const matrix& m2)
+bool TestSuite::TestInverseMultiple(const Matrix_4x4& m1, const Matrix_4x4& m2)
 {
-	matrix m, M; 
-	m = matrix1._create(4, 4);
-	m = matrix1._mat_multiplier(m1, m2);
-	M = matrix1._create(4, 4);
-	M = matrix1._mat_multiplier(m, matrix1._inverse(m2));
-	
-	if (matrix1._compare(M, m1))
+	Matrix_4x4 m3, m4, m5 = m2;
+	m3 = m3.xMatrix(m1, m2);
+	m4 = m4.xMatrix(m3, m4.Inverse(m5));
+
+	if (m4 == m1)
 	{
 		return true;
 	}
@@ -708,6 +697,7 @@ bool TestSuite::TestSphereTransformation(const sphere& s, const tup& t)
 bool TestSuite::TestIntersectingScaledSphere(const ray& r, const sphere& s)
 {
 	sphere s1 = s;
+	s1.transform1.add_scaler(2, 2, 2);
 	s1.transform = matrix1._add_scaling(2, 2, 2);
 	rays.intersect(s1, r);
 	if (rays._get_inters().back().t == 7 && rays._get_inters()[rays._get_inters().size() - 2].t == 3)
@@ -729,7 +719,7 @@ bool TestSuite::TestIntersectingTransformedSphere(const ray& r, const sphere& s)
 	return false;
 }
 
-bool TestSuite::TestShapeNormal(const sphere& s, const tup& point)
+bool TestSuite::TestShapeNormal( sphere& s, const tup& point)
 {
 	tup norm = SP._normal_at(s, point);
 	tup TestVec = tups.createTupleVector(1, 0, 0);
@@ -739,10 +729,10 @@ bool TestSuite::TestShapeNormal(const sphere& s, const tup& point)
 	}
 	return false;
 }
-bool TestSuite::TestTranslatedNormal(const sphere& s, const tup& point)
+bool TestSuite::TestTranslatedNormal(sphere& s, const tup& point)
 {
 	sphere s1 = s;
-	s1.transform = matrix1._add_translation(tups.createTuplePoint(0, 1, 0));
+	s1.transform1.add_translation(0, 1, 0);
 	tup norm = SP._normal_at(s1, point);
 	tup TestVec = tups.createTupleVector(0, 0.70711, -0.70711);
 	if (comp.equal(norm, TestVec));
@@ -751,9 +741,28 @@ bool TestSuite::TestTranslatedNormal(const sphere& s, const tup& point)
 	}
 	return false;
 }
-bool TestSuite::TestTransformedNormal(const sphere& s, const tup& point)
+bool TestSuite::TestTransformedNormal(sphere& s, const tup& point)
 {
 	sphere s1 = s;
+	s.transform1.add_scaler(1, 0.5, 1);
+	/*for (std::size_t i = 0; i < s.transform1.GetRow(); i++)
+	{
+		for (std::size_t j = 0; j < s.transform1.GetCol(); j++)
+		{
+			std::cout << s.transform1.data[i][j] << " ";
+		}
+		std::cout << std::endl;
+	}*/
+	s1.transform1.add_rotationZ((2 * asin(1.0)) / 5);
+	for (std::size_t i = 0; i < s1.transform1.GetRow(); i++)
+	{
+		for (std::size_t j = 0; j < s1.transform1.GetCol(); j++)
+		{
+			std::cout << s1.transform1.data[i][j] << " ";
+		}
+		std::cout << std::endl;
+	}
+	s1.transform1.xMatrix(s.transform1, s1.transform1);
 	s1.transform = matrix1._mat_multiplier(matrix1._add_scaling(1,0.5,1), matrix1._add_rotation_z(matrix1._get_pi()/5));
 	tup norm = SP._normal_at(s1, point);
 	tup TestVec = tups.createTupleVector(0, 0.97014, -0.24254);

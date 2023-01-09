@@ -25,6 +25,7 @@ struct sphere
 {
 	sphere* sid;
 	tup origin;
+	Matrix_4x4 transform1;
 	matrix transform;
 	material materials;
 };
@@ -35,7 +36,7 @@ public:
 	Sphere() {};
 	~Sphere() = default;
 	sphere _init_sphere(sphere& s1);
-	tup _normal_at(const sphere& s, const tup& point);
+	tup _normal_at(sphere& s, const tup& point);
 	tup _reflect(const tup& in,const tup& normal);
 	material _materials();
 	material _fill_materials(const color& c, const float& ambient, const float& diffuse, const float& shininess, const float& specular);

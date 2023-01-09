@@ -102,31 +102,6 @@ public:
         }
     }
 
-    //Matrix<type, row_count-1, column_count-1> Submatrix( Matrix<float, row_count, column_count>& m, size_t r, size_t c) {
-    //    // Check if we are trying to create a sub-matrix of the same size as the current one.
-    //    std::size_t row = m.GetRow() , col = m.GetCol();
-    //    Matrix<float, row_count - 1, column_count - 1> subMatrix;
-    //    if (row_count-1 == row_count && column_count-1 == column_count) {
-    //        return subMatrix;
-    //    }
-    //    std::size_t currentr = 0, currentc = 0;
-    //    for (std::size_t rows = 0; rows < row; rows++) {
-    //        if (rows != r)
-    //        {
-    //            for (std::size_t column = 0; column < col; column++) {
-    //                if (column != c)
-    //                {                       
-    //                    subMatrix.data[currentr][currentc] = data[rows][column];
-    //                    currentc++;
-    //                }
-    //            }
-    //            currentc = 0;
-    //            currentr++;
-    //        }          
-    //    }
-    //    return subMatrix;
-    //}
-
     void add_translation(const float& x, const float y, const float z)
     {
         ToIdentity();
@@ -160,56 +135,29 @@ public:
         data[0][1] = sin(r);
     }
 
-    //template<std::size_t row, std::size_t col>
-    //float Determinant(Matrix<type, row, col>& mat)
-    //{
-    //    float det = 0.0f;
-    //    if(row > 2 || col > 2)
-    //    {
-    //        for(std::size_t c = 0; c < col; c++)
-    //        {
-    //            det = det + (mat.data[0][c] * Cofactor<row, col>(mat, 0, c));
-    //        }
-    //        return det;
-    //    }
-    //    return ((mat.data[0][0] * mat.data[1][1]) - (mat.data[0][1] * mat.data[1][0]));
-    //}
+    Matrix<type, row_count, column_count> Transpose()
+    {
+        Matrix<float, 4, 4> mat;
 
-    //template<std::size_t row, std::size_t col>
-    //float Cofactor(Matrix<type, row, col>& m, const int r, const int c)
-    //{
-    //    float result = Minor<row,col>(m, r, c);
-    //    if (((c + r) % 2) == 0)
-    //    {
-    //        return result;
-    //    }
-    //    else {
-    //        return result * -1;
-    //    }
-    //}
+        for (int i = 0; i < row_count; i++)
+        {
+            mat.data[0][i] = data[i][0];
+            mat.data[1][i] = data[i][1];
+            mat.data[2][i] = data[i][2];
+            mat.data[3][i] = data[i][3];
+        }
+        return mat;
+    }
 
-    //template<std::size_t row, std::size_t col>
-    //float Minor(Matrix<type, row, col>& mat, const int r, const int c) 
-    //{
-    //    if (column_count < 3)
-    //    {
-    //        return Determinant<row, col>(mat);
-    //    }
-    //    Matrix<float, row_count-1, column_count-1> subMat = Submatrix<row, col>(mat, r, c);
-
-    //    return Determinant<row-1, col-1>(subMat);
-    //    // Idk probably do something math-y here.
-    //}
-
-    Matrix<type, row_count, column_count> Inverse(const Matrix<type, row_count, column_count>& m) {
+    Matrix<type, row_count, column_count> Inverse(Matrix<type, row_count, column_count>& m) {
         // Should probably check if it can be inverted first...
 
         float co = 0.0f;
-        Matrix<type, row_count, column_count> inverseMatrix;
-        for (std::size_t i = 0; i < m.GetRow(); i++) {
-            for (std::size_t j = 0; j < m.GetCol(); j++) {
+        Matrix <float, 4, 4> inverseMatrix;
+        for (std::size_t i = 0; i < row_count; i++) {
+            for (std::size_t j = 0; j < column_count; j++) {
                 co = Cofactor(m, i, j);
-                inverseMatrix.data[j][i] = (co/Determinant<row_count, column_count>(m));
+                inverseMatrix.data[j][i] = (co/Determinant(m));
             }
         }
         return inverseMatrix;
