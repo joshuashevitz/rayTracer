@@ -4,22 +4,27 @@ sphere Sphere::_init_sphere(sphere& s2)
 {
 	_clear();
 	Tuples t;
+	Matrix_4x4 id;
 	s.origin = t.createTuplePoint(0, 0, 0);
 	s.sid = &s2;
 	s.transform = mats._get_identity();
+	s.transform1 = id;
 	s.materials = _materials();
 	return s;
 }
 
-tup Sphere::_normal_at(const sphere& s, const tup& point)
+tup Sphere::_normal_at( sphere& s, const tup& point)
 {
-	if (!mats._compare(s.transform, mats._get_identity()))
+	Matrix_4x4 identity, inverse, transpose;
+	if (s.transform1 != identity)
 	{
-		tup object_point = mats._matxtup(mats._inverse(s.transform), point);
-		tup object_normal = math.subtTuples(object_point, tups.createTuplePoint(0, 0, 0));
-		tup world_normal = mats._matxtup(mats._transpose(mats._inverse(s.transform)), object_normal);
-		world_normal.w = 0;
-		return math.normilize(world_normal);
+		inverse = s.transform1.Inverse(s.transform1);
+		transpose = inverse.Transpose();
+		tup op = inverse.xtup(point);
+		tup object_normal = math.subtTuples(op, tups.createTuplePoint(0, 0, 0));
+		tup wn = transpose.xtup(object_normal);
+		wn.w = 0;
+		return math.normilize(wn);
 	}
 	return math.normilize(math.subtTuples(point, s.origin));
 }
@@ -37,8 +42,10 @@ tup Sphere::_reflect(const tup& in, const tup& normal)
 
 void Sphere::_clear() {
 	Tuples t;
+	Matrix_4x4 id;
 	s.sid = 0;
 	s.transform = mats._get_identity();
+	s.transform1 = id;
 }
 
 material Sphere::_fill_materials(const color& c, const float& ambient, const float& diffuse, const float& shininess, const float& specular)

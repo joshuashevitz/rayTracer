@@ -31,10 +31,10 @@ public:
 	bool TestMatrixComparison(const Matrix_4x4& a, const Matrix_4x4& b);
 	bool TestSubmatrix(const Matrix_4x4& m, const int& r, const int& c);
 	bool TestMinor(const Matrix_3x3& m, const int& r, const int& c);
-	bool TestCofactor(const matrix& m, const int& r, const int& c);
-	bool TestDeterminant(const matrix& m);
-	bool TestInverse(const matrix& m);
-	bool TestInverseMultiple(const matrix& m1, const matrix& m2);
+	bool TestCofactor(const Matrix_3x3& m, const int& r, const int& c);
+	bool TestDeterminant(const Matrix_4x4& m);
+	bool TestInverse(const Matrix_4x4& m);
+	bool TestInverseMultiple(const Matrix_4x4& m1, const Matrix_4x4& m2);
 	bool TestTranslation(const tup& t, const tup& vec);
 	bool TestInverseTranslation(const tup& t, const tup& vec);
 	bool TestScaling(const tup& orig, const tup& vec);
@@ -60,9 +60,9 @@ public:
 	bool TestSphereTransformation(const sphere& s, const tup& t);
 	bool TestIntersectingScaledSphere(const ray& r, const sphere& s);
 	bool TestIntersectingTransformedSphere(const ray& r, const sphere& s); 
-	bool TestShapeNormal(const sphere& s, const tup& point);
-	bool TestTranslatedNormal(const sphere& s, const tup& point);
-	bool TestTransformedNormal(const sphere& s, const tup& point);
+	bool TestShapeNormal( sphere& s, const tup& point);
+	bool TestTranslatedNormal( sphere& s, const tup& point);
+	bool TestTransformedNormal( sphere& s, const tup& point);
 	bool TestReflect45Degree(const tup& in, const tup& normal);
 	bool TestReflectingSlantSurface(const tup& in, const tup& normal);
 	bool TestPointLightValues(const tup& position, const color& c);
