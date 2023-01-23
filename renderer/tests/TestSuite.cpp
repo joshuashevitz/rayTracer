@@ -74,9 +74,9 @@ TestSuite::TestSuite()
 	m14.Fill(original);
 	m15.Fill(notOriginal);
 	
-	sphere s1, s2, s3;
+	sphere s1, s2, s3, s4, s5, s6, s7, s8, s9;
 	s1 = s._init_sphere(s1), s2 = s._init_sphere(s2), s3 = s._init_sphere(s3);
-
+	s4 = s1, s5 = s1, s6 = s1, s7 = s1, s8 = s1, s9 = s1;
 	point_light pl;
 	pl.position = tups.createTuplePoint(0, 0, -10);
 	pl.intensity = col.createColor(1, 1, 1);
@@ -549,6 +549,8 @@ bool TestSuite::TestReverseChainApplication(const tup& p1, const tup& s1, const 
 
 bool TestSuite::TestTwoIntersections(const ray& r, const sphere& s) 
 {
+	sphere s1 = s;
+	SP._init_sphere(s1);
 	rays.intersect(s, r);
 	if (rays._get_inters()[0].t == 4.0 && rays._get_inters()[1].t == 6.0)
 	{
@@ -633,8 +635,8 @@ bool TestSuite::TestIntersectVector(const std::vector<intersection>& inters)
 }
 
 //=====================================================================
-//add proper test function to test the aggregate intersection of
-//a sphere and a ray to properly show it is working effectively
+// add proper test function to test the aggregate intersection of
+// a sphere and a ray to properly show it is working effectively
 //=====================================================================
 bool TestSuite::TestAggregateIntersections(const std::vector<intersection>& inters, const sphere& s)
 {
@@ -721,10 +723,13 @@ bool TestSuite::TestIntersectingTransformedSphere(const ray& r, const sphere& s)
 
 bool TestSuite::TestShapeNormal( sphere& s, const tup& point)
 {
-	tup norm = SP._normal_at(s, point);
+	sphere s1 = s;
+	SP._init_sphere(s1);
+	tup norm = SP._normal_at(s1, point);
 	tup TestVec = tups.createTupleVector(1, 0, 0);
 	if (comp.equal(norm, TestVec));
 	{
+		s.transform1.ToIdentity();
 		return true;
 	}
 	return false;
@@ -735,8 +740,12 @@ bool TestSuite::TestTranslatedNormal(sphere& s, const tup& point)
 	s1.transform1.add_translation(0, 1, 0);
 	tup norm = SP._normal_at(s1, point);
 	tup TestVec = tups.createTupleVector(0, 0.70711, -0.70711);
+	
+	tups.printTuple(norm);
+
 	if (comp.equal(norm, TestVec));
 	{
+		
 		return true;
 	}
 	return false;
@@ -745,23 +754,7 @@ bool TestSuite::TestTransformedNormal(sphere& s, const tup& point)
 {
 	sphere s1 = s;
 	s.transform1.add_scaler(1, 0.5, 1);
-	/*for (std::size_t i = 0; i < s.transform1.GetRow(); i++)
-	{
-		for (std::size_t j = 0; j < s.transform1.GetCol(); j++)
-		{
-			std::cout << s.transform1.data[i][j] << " ";
-		}
-		std::cout << std::endl;
-	}*/
 	s1.transform1.add_rotationZ((2 * asin(1.0)) / 5);
-	for (std::size_t i = 0; i < s1.transform1.GetRow(); i++)
-	{
-		for (std::size_t j = 0; j < s1.transform1.GetCol(); j++)
-		{
-			std::cout << s1.transform1.data[i][j] << " ";
-		}
-		std::cout << std::endl;
-	}
 	s1.transform1.xMatrix(s.transform1, s1.transform1);
 	s1.transform = matrix1._mat_multiplier(matrix1._add_scaling(1,0.5,1), matrix1._add_rotation_z(matrix1._get_pi()/5));
 	tup norm = SP._normal_at(s1, point);

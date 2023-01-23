@@ -139,7 +139,7 @@ public:
     {
         Matrix<float, 4, 4> mat;
 
-        for (int i = 0; i < row_count; i++)
+        for (std::size_t i = 0; i < row_count; i++)
         {
             mat.data[0][i] = data[i][0];
             mat.data[1][i] = data[i][1];
@@ -172,7 +172,7 @@ public:
 
         return p;
     }
-    Matrix xMatrix(const Matrix& A, const Matrix& B)
+    Matrix xMatrix(const Matrix<type,row_count, column_count>& A, const Matrix<type, row_count, column_count>& B)
     {
         Matrix<float, 4, 4> newMatrix;
         for (std::size_t i = 0; i < row_count; i++)
