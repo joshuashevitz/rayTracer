@@ -421,14 +421,6 @@ bool TestSuite::TestInverse(const Matrix_4x4& m)
 {
 	Matrix_4x4 inverted, test, m1 = m;
 	inverted = m1.Inverse(m1);
-	//for (std::size_t i = 0; i < m1.GetRow(); i++)
-	//{
-	//	for (std::size_t j = 0; j < m1.GetCol(); j++)
-	//	{
-	//		std::cout << inverted.data[i][j] << " ";
-	//	}
-	//	std::cout << std::endl;
-	//}
 	std::vector<float> inverse{ 0.218045f, 0.451128f, 0.240602f, -0.0451128f,
 							   -0.808271f, -1.45677f, -0.443609f, 0.520677f,
 							   -0.0789474f, -0.223684f, -0.0526316f, 0.197368f,
@@ -458,53 +450,61 @@ bool TestSuite::TestInverseMultiple(const Matrix_4x4& m1, const Matrix_4x4& m2)
 bool TestSuite::TestTranslation(const tup& t, const tup& vec)
 {
 	tup p = tups.createTuplePoint(2, 1, 7);
-	return comp.equal(matrix1._translation(t, vec), p);
+	Matrix_4x4 m; 
+	return comp.equal(m.Translation(t, vec), p);
 }
  
 bool TestSuite::TestInverseTranslation(const tup& t, const tup& vec)
 {	
 	tup test = tups.createTuplePoint(-8, 7, 3);
-	return comp.equal(matrix1._inverse_translation(t, vec), test);
+	Matrix_4x4 m;
+	return comp.equal(m.InverseTranslation(t, vec), test);
 }
 
 bool TestSuite::TestScaling(const tup& orig, const tup& vec)
 {
 	tup test = tups.createTuplePoint(-8, 18, 32);
-	return comp.equal(matrix1._scaling(orig, vec), test);
+	Matrix_4x4 m;
+	return comp.equal(m.Scale(orig, vec), test);
 }
 
 bool TestSuite::TestInverseScaling(const tup& orig, const tup& vec)
 {
 	tup test = tups.createTupleVector(-2, 2, 2);
-	return comp.equal(matrix1._inverse_scaling(orig, vec), test);
+	Matrix_4x4 m;
+	return comp.equal(m.InverseScaling(orig, vec), test);
 }
 
 bool TestSuite::TestRotations_x(const tup& t,const tup& comp_x ,const double& rads)
 {
-
-	return comp.equal(matrix1._rotate_x(t, rads), comp_x);
+	Matrix_4x4 m;
+	return comp.equal(m.RotateX(t, rads), comp_x);
 }
 bool TestSuite::TestRotations_y(const tup& t, const tup& comp_x, const double& rads)
 {
-
-	return comp.equal(matrix1._rotate_y(t, rads), comp_x);
+	Matrix_4x4 m;
+	return comp.equal(m.RotateY(t, rads), comp_x);
 }
 
 bool TestSuite::TestRotations_z(const tup& t, const tup& comp_x, const double& rads)
 {
-
-	return comp.equal(matrix1._rotate_z(t, rads), comp_x);
+	Matrix_4x4 m;
+	return comp.equal(m.RotateZ(t, rads), comp_x);
 }
 
 bool TestSuite::TestInverseRotations_x(const tup& t,const tup& comp_x, const double& rads)
 {
-	return comp.equal(matrix1._matxtup(matrix1._inverse(matrix1._add_rotation_x(rads)), t), comp_x);
+	Matrix_4x4 m, m2;
+	m.add_rotationX(rads);
+	m2 = m.Inverse(m);
+	return comp.equal(m2.xtup(t), comp_x);
 }
 
 bool TestSuite::TestShearing(const tup& t, const float& x1, const float& x2, const float& y1, const float& y2, const float& z1, const float& z2)
 {
 	tup test = tups.createTuplePoint(2, 5, 4);
-	return comp.equal(matrix1._shearing(t, x1, x2, y1, y2, z1, z2), test);
+	Matrix_4x4 m;
+	return comp.equal(m.Shear(t,x1,x2,y1,y2,z1,z2), test);
 }
 
 bool TestSuite::TestChaining(const tup& p1, const tup& s1, const tup& t1, const double& rads)

@@ -102,6 +102,16 @@ public:
         }
     }
 
+    void add_shear(const float& x1, const float& x2, const float& y1, const float& y2, const float& z1, const float& z2)
+    {
+        ToIdentity();
+        data[0][1] = x1;
+        data[0][2] = x2;
+        data[1][0] = y1;
+        data[1][2] = y2;
+        data[2][0] = z1;
+        data[2][1] = z2;
+    }
     void add_translation(const float& x, const float y, const float z)
     {
         ToIdentity();
@@ -129,10 +139,36 @@ public:
     void add_rotationX(const float& r)
     {
         ToIdentity();
-        data[0][0] = cos(r);
-        data[1][0] = -(sin(r));
         data[1][1] = cos(r);
-        data[0][1] = sin(r);
+        data[1][2] = -(sin(r));
+        data[2][2] = cos(r);
+        data[2][1] = sin(r);
+    }
+    void add_rotationY(const float& r)
+    {
+        ToIdentity();
+        data[0][0] = cos(r);
+        data[0][2] = sin(r);
+        data[2][2] = cos(r);
+        data[2][0] = -(sin(r));
+    }
+
+    tup RotateX(const tup& t, const double& rads)
+    {
+        add_rotationX(rads);
+        return xtup(t);   
+    }
+
+    tup RotateY(const tup& t, const double& rads)
+    {
+        add_rotationY(rads);
+        return xtup(t);
+    }
+
+    tup RotateZ(const tup& t, const double& rads)
+    {
+        add_rotationZ(rads);
+        return xtup(t);
     }
 
     Matrix<type, row_count, column_count> Transpose()
@@ -163,6 +199,25 @@ public:
         return inverseMatrix;
     }
 
+    void Invert_self()
+    {
+        Matrix < type, row_count, column_count > m;
+        float co = 0.0f;
+        for (std::size_t i = 0; i < row_count; i++) {
+            for (std::size_t j = 0; j < column_count; j++) {
+                m.data[i][j] = data[i][j];
+                co = Cofactor(m, i, j);
+                data[j][i] = (co / Determinant(m));
+            }
+        }
+    }
+
+    tup Scale(const tup& orig, const tup& vec)
+    {
+        add_scaler(vec.x, vec.y, vec.z);
+        return xtup(orig);
+    }
+
     tup xtup(const tup& t) {
         tup p;
         p.x = ((data[0][0] * t.x) + (data[0][1] * t.y) + (data[0][2] * t.z) + (data[0][3] * t.w));
@@ -188,6 +243,42 @@ public:
         return newMatrix;
     }
 
+    tup Translation(const tup& orig, const tup& vec)
+    {
+        if (orig.w == 0)
+        {
+            std::cout << "Given a vector as an origin; Must be a Point. " << std::endl;
+            return orig;
+        }
+        add_translation(vec.x, vec.y, vec.z);    
+        return xtup(orig);
+    }
+
+    tup InverseTranslation(const tup& orig, const tup& vec)
+    {
+        if (orig.w == 0)
+        {
+            std::cout << "Given a vector as an origin; Must be a Point. " << std::endl;
+            return orig;
+        }
+        add_translation(vec.x, vec.y, vec.z);
+        Invert_self();
+        return xtup(orig);
+    }
+    
+    tup InverseScaling(const tup& orig, const tup& vec)
+    {
+        add_scaler(vec.x, vec.y, vec.z);
+        Invert_self();
+        return xtup(orig);
+    }
+    
+    tup Shear(const tup& t, const float& x1, const float& x2, const float& y1, const float& y2, const float& z1, const float& z2)
+    {
+        add_shear(x1, x2, y1, y2, z1, z2);
+        return xtup(t);
+    }
+
     size_t GetRow()
     {
         return row_count;
@@ -195,6 +286,18 @@ public:
     size_t GetCol()
     {
         return column_count;
+    }
+
+    void PrintMatrix() {
+
+        for (std::size_t i = 0; i < row_count; i++)
+        {
+            for (std::size_t j = 0; j < column_count; j++)
+            {
+                std::cout << data[i][j] << " | ";
+            }
+            std::cout << std::endl;
+        }
     }
 
     static const Matrix<type, row_count, column_count> Identity;
@@ -207,7 +310,6 @@ typedef Matrix<float, 4u, 4u> Matrix_4x4;
 template<std::size_t row, std::size_t col> 
 Matrix<float, row-1, col-1> Submatrix(Matrix<float, row, col>& mat, int r, int c)
 {
-    //Matrix_4x4 m = m1;
     Matrix<float, row - 1, col - 1> sub;
     std::size_t crow=0, ccol=0;
     for (std::size_t i = 0; i < row; i++)
